@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
     <title>Griya Bugar - Pijat Benar Benar Pijat (Since 1998)</title>
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400..900;1,400..900&family=Poppins:wght=300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome support -->
+    
+    <!-- FontAwesome Support -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase Compat SDKs (Ultra Stable for Browser & GitHub Pages) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    
+    <!-- Tailwind Custom Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -71,32 +80,44 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- React App Script (Transpiled by Babel in iframe runtime) -->
     <script type="text/babel">
         const { useState, useEffect } = React;
-        
-        // Custom Inline Icons utilizing FontAwesome internally for zero dependency weight
-        const MapPin = ({ className, size = 20 }) => <i className={`fa-solid fa-map-pin ${className}`} style={{ fontSize: size }}></i>;
-        const Calendar = ({ className, size = 20 }) => <i className={`fa-solid fa-calendar ${className}`} style={{ fontSize: size }}></i>;
-        const Clock = ({ className, size = 20 }) => <i className={`fa-solid fa-clock ${className}`} style={{ fontSize: size }}></i>;
-        const User = ({ className, size = 20 }) => <i className={`fa-solid fa-user ${className}`} style={{ fontSize: size }}></i>;
-        const Phone = ({ className, size = 20 }) => <i className={`fa-solid fa-phone ${className}`} style={{ fontSize: size }}></i>;
-        const Settings = ({ className, size = 20 }) => <i className={`fa-solid fa-gears ${className}`} style={{ fontSize: size }}></i>;
-        const BookOpen = ({ className, size = 20 }) => <i className={`fa-solid fa-book-open ${className}`} style={{ fontSize: size }}></i>;
-        const Plus = ({ className, size = 16 }) => <i className={`fa-solid fa-plus ${className}`} style={{ fontSize: size }}></i>;
-        const Trash2 = ({ className, size = 16 }) => <i className={`fa-solid fa-trash-can ${className}`} style={{ fontSize: size }}></i>;
-        const Edit2 = ({ className, size = 16 }) => <i className={`fa-solid fa-pen-to-square ${className}`} style={{ fontSize: size }}></i>;
-        const Save = ({ className, size = 16 }) => <i className={`fa-solid fa-floppy-disk ${className}`} style={{ fontSize: size }}></i>;
-        const CheckCircle2 = ({ className, size = 24 }) => <i className={`fa-solid fa-circle-check ${className}`} style={{ fontSize: size }}></i>;
-        const ExternalLink = ({ className, size = 16 }) => <i className={`fa-solid fa-arrow-up-right-from-square ${className}`} style={{ fontSize: size }}></i>;
-        const MessageSquare = ({ className, size = 18 }) => <i className={`fa-solid fa-comment-dots ${className}`} style={{ fontSize: size }}></i>;
-        const AlertCircle = ({ className, size = 18 }) => <i className={`fa-solid fa-triangle-exclamation ${className}`} style={{ fontSize: size }}></i>;
-        const HelpCircle = ({ className, size = 18 }) => <i className={`fa-solid fa-circle-question ${className}`} style={{ fontSize: size }}></i>;
-        const TrendingUp = ({ className, size = 16 }) => <i className={`fa-solid fa-chart-line ${className}`} style={{ fontSize: size }}></i>;
-        const X = ({ className, size = 18 }) => <i className={`fa-solid fa-xmark ${className}`} style={{ fontSize: size }}></i>;
-        const Lock = ({ className, size = 18 }) => <i className={`fa-solid fa-lock ${className}`} style={{ fontSize: size }}></i>;
-        const ShieldCheck = ({ className, size = 20 }) => <i className={`fa-solid fa-shield-halved ${className}`} style={{ fontSize: size }}></i>;
-        const Copy = ({ className, size = 16 }) => <i className={`fa-solid fa-copy ${className}`} style={{ fontSize: size }}></i>;
+
+        // =========================================================================
+        // KONFIGURASI FIREBASE RESMI GRIYA BUGAR
+        // =========================================================================
+        const MANUAL_FIREBASE_CONFIG = {
+            apiKey: "AIzaSyCYh-z17SfQJkugBZjQfrdIfSpn2D4n3e0",
+            authDomain: "griya-bugar-app.firebaseapp.com",
+            projectId: "griya-bugar-app",
+            storageBucket: "griya-bugar-app.firebasestorage.app",
+            messagingSenderId: "630925670923",
+            appId: "1:630925670923:web:11d155b211023d7fab250e",
+            measurementId: "G-FB7RSHC3E7"
+        };
+
+        // Custom Inline Icons utilizing FontAwesome internally
+        const MapPin = ({ className = "", size = 20 }) => <i className={`fa-solid fa-map-pin ${className}`} style={{ fontSize: size }}></i>;
+        const Calendar = ({ className = "", size = 20 }) => <i className={`fa-solid fa-calendar ${className}`} style={{ fontSize: size }}></i>;
+        const Clock = ({ className = "", size = 20 }) => <i className={`fa-solid fa-clock ${className}`} style={{ fontSize: size }}></i>;
+        const User = ({ className = "", size = 20 }) => <i className={`fa-solid fa-user ${className}`} style={{ fontSize: size }}></i>;
+        const Phone = ({ className = "", size = 20 }) => <i className={`fa-solid fa-phone ${className}`} style={{ fontSize: size }}></i>;
+        const Settings = ({ className = "", size = 20 }) => <i className={`fa-solid fa-gears ${className}`} style={{ fontSize: size }}></i>;
+        const BookOpen = ({ className = "", size = 20 }) => <i className={`fa-solid fa-book-open ${className}`} style={{ fontSize: size }}></i>;
+        const Plus = ({ className = "", size = 16 }) => <i className={`fa-solid fa-plus ${className}`} style={{ fontSize: size }}></i>;
+        const Trash2 = ({ className = "", size = 16 }) => <i className={`fa-solid fa-trash-can ${className}`} style={{ fontSize: size }}></i>;
+        const Edit2 = ({ className = "", size = 16 }) => <i className={`fa-solid fa-pen-to-square ${className}`} style={{ fontSize: size }}></i>;
+        const Save = ({ className = "", size = 16 }) => <i className={`fa-solid fa-floppy-disk ${className}`} style={{ fontSize: size }}></i>;
+        const CheckCircle2 = ({ className = "", size = 24 }) => <i className={`fa-solid fa-circle-check ${className}`} style={{ fontSize: size }}></i>;
+        const ExternalLink = ({ className = "", size = 16 }) => <i className={`fa-solid fa-arrow-up-right-from-square ${className}`} style={{ fontSize: size }}></i>;
+        const MessageSquare = ({ className = "", size = 18 }) => <i className={`fa-solid fa-comment-dots ${className}`} style={{ fontSize: size }}></i>;
+        const AlertCircle = ({ className = "", size = 18 }) => <i className={`fa-solid fa-triangle-exclamation ${className}`} style={{ fontSize: size }}></i>;
+        const TrendingUp = ({ className = "", size = 16 }) => <i className={`fa-solid fa-chart-line ${className}`} style={{ fontSize: size }}></i>;
+        const X = ({ className = "", size = 18 }) => <i className={`fa-solid fa-xmark ${className}`} style={{ fontSize: size }}></i>;
+        const Lock = ({ className = "", size = 18 }) => <i className={`fa-solid fa-lock ${className}`} style={{ fontSize: size }}></i>;
+        const Copy = ({ className = "", size = 16 }) => <i className={`fa-solid fa-copy ${className}`} style={{ fontSize: size }}></i>;
+        const Cloud = ({ className = "", size = 16 }) => <i className={`fa-solid fa-cloud ${className}`} style={{ fontSize: size }}></i>;
+        const HardDrive = ({ className = "", size = 16 }) => <i className={`fa-solid fa-hard-drive ${className}`} style={{ fontSize: size }}></i>;
 
         const GriyaBugarLogo = ({ className = "h-16 sm:h-20 w-auto object-contain" }) => (
             <img 
@@ -142,7 +163,6 @@
                 nav_articles: "Artikel",
                 nav_franchise: "Kemitraan",
                 nav_contact: "Kontak",
-                nav_admin: "Admin Portal",
                 hero_sub: "Hadir di 5 Kota Besar Indonesia dengan Standar Pelayanan Terbaik. Didukung terapis berpengalaman tinggi untuk kebugaran maksimal Anda.",
                 hero_cta_book: "Booking Sekarang",
                 hero_cta_branches: "Lihat Cabang",
@@ -182,7 +202,6 @@
                 nav_articles: "Articles",
                 nav_franchise: "Franchise",
                 nav_contact: "Contact",
-                nav_admin: "Admin Portal",
                 hero_sub: "Present in 5 Major Indonesian Cities with top luxury service standards. Supported by highly experienced therapists for your ultimate wellness.",
                 hero_cta_book: "Book Now",
                 hero_cta_branches: "View Branches",
@@ -216,10 +235,15 @@
         function App() {
             const [currentPage, setCurrentPage] = useState('home');
             const [currentLang, setCurrentLang] = useState('id');
-            const [branches, setBranches] = useState([]);
+            const [branches, setBranches] = useState(INITIAL_BRANCHES);
             const [settings, setSettings] = useState(DEFAULT_SETTINGS);
-            const [loading, setLoading] = useState(true);
+            const [bookingLogs, setBookingLogs] = useState([]);
             
+            // Firebase State & Connection Indicator
+            const [fb, setFb] = useState(null);
+            const [isFirebaseConnected, setIsFirebaseConnected] = useState(false);
+            const [customFbConfig, setCustomFbConfig] = useState(JSON.stringify(MANUAL_FIREBASE_CONFIG, null, 2));
+
             // UI States
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
             const [isWaWidgetOpen, setIsWaWidgetOpen] = useState(false);
@@ -227,11 +251,14 @@
             const [isLocationRecommended, setIsLocationRecommended] = useState(false);
             const [selectedBranchId, setSelectedBranchId] = useState('jogja-pakuningratan');
             
-            // Custom dialog modal states
+            // Hidden Admin Access Gesture Counter
+            const [logoClickCount, setLogoClickCount] = useState(0);
+
+            // Custom dialog modal & toast
             const [dialogConfig, setDialogConfig] = useState(null); 
             const [toast, setToast] = useState(null); 
 
-            // Booking Engine Form State
+            // Booking Form State
             const [formData, setFormData] = useState({
                 name: '',
                 phone: '',
@@ -243,16 +270,16 @@
             });
             const [successBooking, setSuccessBooking] = useState(null);
 
-            // Admin Panel Authentication
+            // Admin Authentication State
             const [adminAuthenticated, setAdminAuthenticated] = useState(false);
             const [adminPassword, setAdminPassword] = useState('');
             const [adminError, setAdminError] = useState('');
 
-            // Admin Dashboard fields
+            // Admin Dashboard Form Fields
             const [newBranch, setNewBranch] = useState({ name: '', region: 'Yogyakarta', price: '', address: '', phone: '082124499924' });
             const [editingBranchId, setEditingBranchId] = useState(null);
             const [editingBranchData, setEditingBranchData] = useState({ name: '', region: '', price: '', address: '', phone: '' });
-            const [tempSettings, setTempSettings] = useState({ whatsapp: '', template: '' });
+            const [tempSettings, setTempSettings] = useState(DEFAULT_SETTINGS);
 
             const showToast = (title, message, type = 'success') => {
                 setToast({ title, message, type });
@@ -280,7 +307,36 @@
                 });
             };
 
-            // URL Hash Change Listener (Secret Admin Shortcut)
+            // SECRET ADMIN ACCESS METHOD 1: Keyboard Shortcut (Ctrl + Shift + A / Cmd + Shift + A)
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+                        e.preventDefault();
+                        setCurrentPage('admin');
+                        showToast("Akses Konsol Admin", "Membuka halaman administrator tersembunyi.", "success");
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, []);
+
+            // SECRET ADMIN ACCESS METHOD 2: Triple Click on Logo within 1 second
+            const handleLogoTripleClick = () => {
+                setLogoClickCount(prev => prev + 1);
+            };
+
+            useEffect(() => {
+                if (logoClickCount === 0) return;
+                const timer = setTimeout(() => setLogoClickCount(0), 1200);
+                if (logoClickCount >= 3) {
+                    setCurrentPage('admin');
+                    showToast("Portal Admin Terdeteksi", "Akses rahasia via logo diaktifkan.", "success");
+                    setLogoClickCount(0);
+                }
+                return () => clearTimeout(timer);
+            }, [logoClickCount]);
+
+            // URL Hash Change Listener (Secret Admin Route: #admin)
             useEffect(() => {
                 const handleHashChange = () => {
                     if (window.location.hash === '#admin') {
@@ -295,35 +351,110 @@
             }, []);
 
             useEffect(() => {
-                const initApp = async () => {
-                    const localBranches = localStorage.getItem('gb_branches_v3');
-                    const localSettings = localStorage.getItem('gb_settings_v3');
-                    
-                    if (localBranches) {
-                        setBranches(JSON.parse(localBranches));
-                    } else {
-                        setBranches(INITIAL_BRANCHES);
-                        localStorage.setItem('gb_branches_v3', JSON.stringify(INITIAL_BRANCHES));
-                    }
+                let unsubBranches, unsubSettings, unsubBookings;
 
+                const initAppAndFirebase = async () => {
+                    // 1. Load Local Storage Backup
+                    const localBranches = localStorage.getItem('gb_branches_v5');
+                    const localSettings = localStorage.getItem('gb_settings_v5');
+                    const localBookings = localStorage.getItem('gb_bookings_v5');
+
+                    if (localBranches) setBranches(JSON.parse(localBranches));
                     if (localSettings) {
                         setSettings(JSON.parse(localSettings));
                         setTempSettings(JSON.parse(localSettings));
-                    } else {
-                        setSettings(DEFAULT_SETTINGS);
-                        setTempSettings(DEFAULT_SETTINGS);
-                        localStorage.setItem('gb_settings_v3', JSON.stringify(DEFAULT_SETTINGS));
                     }
-                    
-                    setLoading(false);
+                    if (localBookings) setBookingLogs(JSON.parse(localBookings));
 
-                    // Open geolocation prompt after 3 seconds
+                    // 2. Initialize Firebase Cloud Sync
+                    try {
+                        let firebaseConfig = MANUAL_FIREBASE_CONFIG;
+
+                        if (!firebaseConfig) {
+                            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                                firebaseConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config;
+                            } else {
+                                const savedFbConfig = localStorage.getItem('gb_custom_fb_config');
+                                if (savedFbConfig) {
+                                    firebaseConfig = JSON.parse(savedFbConfig);
+                                    setCustomFbConfig(savedFbConfig);
+                                }
+                            }
+                        } else {
+                            setCustomFbConfig(JSON.stringify(MANUAL_FIREBASE_CONFIG, null, 2));
+                        }
+
+                        if (firebaseConfig && typeof firebase !== 'undefined') {
+                            if (!firebase.apps.length) {
+                                firebase.initializeApp(firebaseConfig);
+                            }
+                            
+                            const db = firebase.firestore();
+                            const auth = firebase.auth();
+
+                            if (!auth.currentUser) {
+                                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                                    await auth.signInWithCustomToken(__initial_auth_token);
+                                } else {
+                                    await auth.signInAnonymously();
+                                }
+                            }
+
+                            const appId = typeof __app_id !== 'undefined' ? __app_id : 'griya-bugar-app';
+                            setFb({ db, auth, appId });
+                            setIsFirebaseConnected(true);
+
+                            // Real-time Firestore Branches Listener
+                            const branchesRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('branches');
+                            unsubBranches = branchesRef.onSnapshot((snap) => {
+                                if (snap.empty) {
+                                    INITIAL_BRANCHES.forEach(b => branchesRef.doc(b.id).set(b));
+                                } else {
+                                    const loadedBranches = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                                    setBranches(loadedBranches);
+                                    localStorage.setItem('gb_branches_v5', JSON.stringify(loadedBranches));
+                                }
+                            }, console.error);
+
+                            // Real-time Firestore Settings Listener
+                            const settingsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('settings');
+                            unsubSettings = settingsRef.onSnapshot((snap) => {
+                                const configDoc = snap.docs.find(d => d.id === 'config');
+                                if (configDoc) {
+                                    const data = configDoc.data();
+                                    setSettings(data);
+                                    setTempSettings(data);
+                                    localStorage.setItem('gb_settings_v5', JSON.stringify(data));
+                                } else if (snap.empty) {
+                                    settingsRef.doc('config').set(DEFAULT_SETTINGS);
+                                }
+                            }, console.error);
+
+                            // Real-time Firestore Booking Logs Listener
+                            const bookingsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('bookings');
+                            unsubBookings = bookingsRef.onSnapshot((snap) => {
+                                const loadedBookings = snap.docs.map(doc => ({ fbId: doc.id, ...doc.data() }));
+                                loadedBookings.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                                setBookingLogs(loadedBookings);
+                                localStorage.setItem('gb_bookings_v5', JSON.stringify(loadedBookings));
+                            }, console.error);
+                        }
+                    } catch (err) {
+                        console.warn("Running in Offline/Local Mode:", err);
+                    }
+
                     setTimeout(() => {
                         setIsLocationPromptOpen(true);
                     }, 3000);
                 };
 
-                initApp();
+                initAppAndFirebase();
+
+                return () => {
+                    if (unsubBranches) unsubBranches();
+                    if (unsubSettings) unsubSettings();
+                    if (unsubBookings) unsubBookings();
+                };
             }, []);
 
             const handleInputChange = (e) => {
@@ -367,15 +498,12 @@
                     return;
                 }
 
-                // Generate Unique Booking Code
                 const uniqueCode = generateUniqueBookingCode();
-
                 const formattedPrice = formatIDR(currentPrice);
                 const dateObj = new Date(formData.date);
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 const formattedDate = isNaN(dateObj.getTime()) ? formData.date : dateObj.toLocaleDateString(currentLang === 'id' ? 'id-ID' : 'en-US', options);
 
-                // Compile WhatsApp redirect template string
                 let message = settings.template;
                 message = message.replace(/\[KODE\]/g, uniqueCode);
                 message = message.replace(/\[NAMA\]/g, formData.name);
@@ -387,12 +515,34 @@
                 message = message.replace(/\[HARGA\]/g, formattedPrice);
                 message = message.replace(/\[CATATAN\]/g, formData.notes || '-');
 
-                // Route message to branch's phone if configured, fallback to global settings
                 const branchPhoneNum = currentBranchObj.phone || settings.whatsapp;
                 const sanitizedPhone = branchPhoneNum.replace(/[^0-9]/g, '');
                 const finalPhone = sanitizedPhone.startsWith('0') ? '62' + sanitizedPhone.substring(1) : sanitizedPhone;
 
                 const waLink = `https://api.whatsapp.com/send?phone=${finalPhone}&text=${encodeURIComponent(message)}`;
+                
+                const bookingRecord = {
+                    code: uniqueCode,
+                    timestamp: new Date().toLocaleString('id-ID'),
+                    createdAt: new Date().toISOString(),
+                    customerName: formData.name,
+                    customerPhone: formData.phone,
+                    branchName: currentBranchObj.name + ` (${currentBranchObj.region})`,
+                    date: formattedDate,
+                    time: formData.time,
+                    service: formData.service,
+                    totalPrice: currentPrice,
+                    notes: formData.notes || '-'
+                };
+
+                // Save transaction to Firestore Cloud Database
+                if (fb && isFirebaseConnected) {
+                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('bookings').add(bookingRecord);
+                } else {
+                    const updatedLogs = [bookingRecord, ...bookingLogs];
+                    setBookingLogs(updatedLogs);
+                    localStorage.setItem('gb_bookings_v5', JSON.stringify(updatedLogs));
+                }
                 
                 setSuccessBooking({
                     link: waLink,
@@ -414,20 +564,36 @@
 
             const handleAdminLogin = (e) => {
                 e.preventDefault();
-                if (adminPassword === 'griyabugar' || adminPassword === 'admin') {
+                const pwd = adminPassword.trim().toLowerCase();
+                if (pwd === 'griyabugar' || pwd === 'admin' || pwd === '123456') {
                     setAdminAuthenticated(true);
                     setAdminError('');
                     showToast("Login Berhasil", "Selamat datang di halaman administrasi terpusat.", "success");
                 } else {
-                    setAdminError(currentLang === 'id' ? 'Sandi salah. Coba: "griyabugar"' : 'Incorrect Password. Try: "griyabugar"');
+                    setAdminError(currentLang === 'id' ? 'Sandi salah. Ketik: "griyabugar"' : 'Incorrect Password. Try: "griyabugar"');
                 }
             };
 
             const handleSaveSettings = (e) => {
                 e.preventDefault();
-                setSettings(tempSettings);
-                localStorage.setItem('gb_settings_v3', JSON.stringify(tempSettings));
+                if (fb && isFirebaseConnected) {
+                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('settings').doc('config').set(tempSettings);
+                } else {
+                    setSettings(tempSettings);
+                    localStorage.setItem('gb_settings_v5', JSON.stringify(tempSettings));
+                }
                 showToast("Pengaturan Disimpan", "Template WhatsApp dan nomor utama berhasil diperbarui.", "success");
+            };
+
+            const handleSaveCustomFirebaseConfig = (e) => {
+                e.preventDefault();
+                try {
+                    JSON.parse(customFbConfig);
+                    localStorage.setItem('gb_custom_fb_config', customFbConfig);
+                    showToast("Firebase Config Disimpan", "Silakan muat ulang halaman untuk menerapkan koneksi baru.", "success");
+                } catch(err) {
+                    triggerAlert("Format JSON Salah", "Harap pastikan kodingan konfigurasi berupa format JSON yang valid.");
+                }
             };
 
             const handleAddBranch = (e) => {
@@ -458,12 +624,16 @@
                     spec: 'Wellness Massages'
                 };
 
-                const updated = [...branches, branchPayload];
-                setBranches(updated);
-                localStorage.setItem('gb_branches_v3', JSON.stringify(updated));
+                if (fb && isFirebaseConnected) {
+                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches').doc(randomId).set(branchPayload);
+                } else {
+                    const updated = [...branches, branchPayload];
+                    setBranches(updated);
+                    localStorage.setItem('gb_branches_v5', JSON.stringify(updated));
+                }
 
                 setNewBranch({ name: '', region: 'Yogyakarta', price: '', address: '', phone: '082124499924' });
-                showToast("Cabang Ditambahkan", "Cabang baru berhasil disimpan ke database.", "success");
+                showToast("Cabang Ditambahkan", "Cabang baru berhasil disimpan.", "success");
             };
 
             const handleDeleteBranch = (id, name) => {
@@ -471,10 +641,14 @@
                     "Konfirmasi Hapus",
                     `Apakah Anda yakin ingin menghapus cabang ${name}?`,
                     () => {
-                        const updated = branches.filter(b => b.id !== id);
-                        setBranches(updated);
-                        localStorage.setItem('gb_branches_v3', JSON.stringify(updated));
-                        showToast("Cabang Dihapus", `Cabang ${name} telah berhasil dihapus dari sistem.`, "success");
+                        if (fb && isFirebaseConnected) {
+                            fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches').doc(id).delete();
+                        } else {
+                            const updated = branches.filter(b => b.id !== id);
+                            setBranches(updated);
+                            localStorage.setItem('gb_branches_v5', JSON.stringify(updated));
+                        }
+                        showToast("Cabang Dihapus", `Cabang ${name} telah dihapus.`, "success");
                     }
                 );
             };
@@ -497,11 +671,36 @@
                     return;
                 }
 
-                const updated = branches.map(b => b.id === id ? { id, ...editingBranchData, price: priceNum } : b);
-                setBranches(updated);
-                localStorage.setItem('gb_branches_v3', JSON.stringify(updated));
+                if (fb && isFirebaseConnected) {
+                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches').doc(id).update({ ...editingBranchData, price: priceNum });
+                } else {
+                    const updated = branches.map(b => b.id === id ? { id, ...editingBranchData, price: priceNum } : b);
+                    setBranches(updated);
+                    localStorage.setItem('gb_branches_v5', JSON.stringify(updated));
+                }
+                
                 setEditingBranchId(null);
                 showToast("Cabang Diperbarui", "Data perubahan cabang berhasil disimpan.", "success");
+            };
+
+            const clearBookingLogs = () => {
+                triggerConfirm(
+                    "Hapus Riwayat Booking",
+                    "Apakah Anda yakin ingin mengosongkan seluruh catatan log pemesanan?",
+                    () => {
+                        if (fb && isFirebaseConnected) {
+                            bookingLogs.forEach(log => {
+                                if (log.fbId) {
+                                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('bookings').doc(log.fbId).delete();
+                                }
+                            });
+                        } else {
+                            setBookingLogs([]);
+                            localStorage.removeItem('gb_bookings_v5');
+                        }
+                        showToast("Log Dibersihkan", "Riwayat pemesanan telah dikosongkan.", "success");
+                    }
+                );
             };
 
             return (
@@ -652,12 +851,19 @@
                         )}
                     </div>
 
-                    {/* HEADER NAVIGATION */}
                     <header className="sticky top-0 z-30 bg-brandBrown text-white border-b border-brandGold/20 shadow-lg">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex items-center justify-between h-20 sm:h-24">
                                 
-                                <div className="flex-shrink-0 cursor-pointer py-1 focus:outline-none flex items-center gap-2" onClick={() => setCurrentPage('home')}>
+                                {/* Logo (Clickable for Home + Secret Triple-Click for Admin Access) */}
+                                <div 
+                                    className="flex-shrink-0 cursor-pointer py-1 focus:outline-none flex items-center gap-2 select-none" 
+                                    onClick={() => {
+                                        setCurrentPage('home');
+                                        handleLogoTripleClick();
+                                    }}
+                                    title="Griya Bugar Indonesia"
+                                >
                                     <GriyaBugarLogo className="h-16 sm:h-20 md:h-22 w-auto object-contain" />
                                 </div>
 
@@ -716,11 +922,9 @@
                         )}
                     </header>
 
+                    {/* MAIN CONTENT VIEWS */}
                     <main className="flex-grow">
                         
-                        {/* ==================================== */}
-                        {/* HOME PAGE                            */}
-                        {/* ==================================== */}
                         {currentPage === 'home' && (
                             <div>
                                 <div className="relative min-h-[70vh] flex items-center bg-black overflow-hidden">
@@ -749,7 +953,6 @@
                                     </div>
                                 </div>
 
-                                {/* COUNTER STATISTICS */}
                                 <div className="bg-brandBrown text-brandCream py-10 border-b border-brandGold/15">
                                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -773,7 +976,6 @@
                                     </div>
                                 </div>
 
-                                {/* SIGNATURE TREATMENTS GRID */}
                                 <div className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                     <div className="text-center max-w-3xl mx-auto mb-16">
                                         <span className="text-brandGold font-semibold text-xs uppercase tracking-[0.2em]">{currentLang === 'id' ? 'LAYANAN TERBAIK KAMI' : 'OUR BEST TREATMENTS'}</span>
@@ -801,7 +1003,7 @@
                                     </div>
                                 </div>
 
-                                {/* PREMIUM PDF CAMSCANNER VISUAL LOOKBOOK GALLERY */}
+                                {/* PREMIUM LOOKBOOK GALLERY */}
                                 <div className="bg-brandBrown text-white py-16 sm:py-24">
                                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -831,7 +1033,7 @@
                                     </div>
                                 </div>
 
-                                {/* ACTIVE BRAND BRANCH PREVIEW DIRECTORY */}
+                                {/* NATIONAL BRANCH DIRECTORY PREVIEW */}
                                 <div className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
                                         <div>
@@ -873,9 +1075,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* ABOUT US PAGE                        */}
-                        {/* ==================================== */}
                         {currentPage === 'about' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -888,10 +1087,12 @@
                                         <div>
                                             <p className="text-brandBrown font-serif text-xl sm:text-2xl leading-relaxed mb-6 italic">"PIJAT BENAR BENAR PIJAT • Menghadirkan kesehatan relaksasi optimal sejak 1998."</p>
                                             <p className="text-xs sm:text-sm text-brandBrown/70 leading-relaxed mb-4">Griya Bugar Massage Profesional merupakan layanan pijat dan terapi kebugaran profesional yang hadir untuk membantu menjaga kesehatan dan relaksasi tubuh. Didukung oleh terapis berpengalaman dan pelayanan berkualitas, Griya Bugar telah melayani pelanggan di Bali, Yogyakarta, Solo, Semarang, dan Malang, dengan komitmen memberikan kenyamanan dan kepuasan terbaik bagi setiap pelanggan.</p>
+                                            
                                             <div className="mt-6 border-l-4 border-brandGold pl-4">
                                                 <h4 className="font-bold text-brandBrown text-xs sm:text-sm uppercase">{currentLang === 'id' ? 'Visi Kami' : 'Our Vision'}</h4>
                                                 <p className="text-xs sm:text-sm text-brandBrown/75 italic mt-1">Menjadi penyedia layanan pijat dan terapi kebugaran professional terpercaya di Indonesia yang menghadirkan manfaat kesehatan, relaksasi, dan kenyamanan bagi setiap pelanggan.</p>
                                             </div>
+                                            
                                             <div className="mt-6 border-l-4 border-brandGold pl-4">
                                                 <h4 className="font-bold text-brandBrown text-xs sm:text-sm uppercase">{currentLang === 'id' ? 'Misi Kami' : 'Our Mission'}</h4>
                                                 <ul className="text-xs sm:text-sm text-brandBrown/75 space-y-1.5 mt-1.5 list-decimal list-inside">
@@ -911,9 +1112,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* DETAILED SERVICES CATALOG PAGE       */}
-                        {/* ==================================== */}
                         {currentPage === 'services' && (
                             <div className="py-16 sm:py-24 bg-brandCream">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -964,9 +1162,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* REGIONAL BRANCHES DIRECTORY          */}
-                        {/* ==================================== */}
                         {currentPage === 'branches' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1007,9 +1202,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* DYNAMIC BRANCH DETAIL VIEW           */}
-                        {/* ==================================== */}
                         {currentPage === 'branch-detail' && (() => {
                             const activeBranch = branches.find(b => b.id === selectedBranchId) || branches[0];
                             if (!activeBranch) return null;
@@ -1134,25 +1326,21 @@
                             );
                         })()}
 
-                        {/* ==================================== */}
-                        {/* MAIN BOOKING ENGINE PAGE (STANDALONE)*/}
-                        {/* ==================================== */}
                         {currentPage === 'booking' && (
                             <div className="py-16 sm:py-24 bg-brandCream">
                                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                                     <div className="text-center max-w-lg mx-auto mb-10">
                                         <span className="text-brandGold font-semibold text-xs uppercase tracking-[0.2em]">FAST ONLINE BOOKING</span>
                                         <h2 className="font-serif text-2xl sm:text-3xl text-brandBrown mt-2">Reservasi Sesi Griya Bugar</h2>
-                                        <p className="text-xs text-brandBrown/60 mt-2">Lengkapi detail pemesanan di bawah ini untuk mengarahkan pesan konfirmasi instan ke WhatsApp cabang terpilih.</p>
+                                        <p className="text-xs text-brandBrown/60 mt-2">Lengkapi detail pemesanan untuk mengarahkan pesan konfirmasi instan ke WhatsApp cabang terpilih.</p>
                                     </div>
                                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                                        
                                         <div className="lg:col-span-5 bg-brandBrown text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-brandGold/20 relative overflow-hidden flex flex-col justify-between min-h-[400px]">
                                             <div className="absolute top-0 right-0 w-32 h-32 bg-brandGold/5 rounded-full blur-2xl pointer-events-none"></div>
                                             <div>
                                                 <span className="inline-block bg-brandGold/20 border border-brandGold/30 text-brandGold text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wider">Promo Khusus Website</span>
                                                 <h3 className="font-serif text-2xl sm:text-3xl font-bold mb-4">Pijat Tradisional <br /><span className="text-brandGold">Durasi 1 Jam</span></h3>
-                                                <p className="text-xs text-brandCream/80 leading-relaxed mb-6">Rasakan kebugaran optimal bersama terapis andalan bersertifikat. Dapatkan harga khusus booking via web yang otomatis terintegrasi dengan WhatsApp cabang tujuan.</p>
+                                                <p className="text-xs text-brandCream/80 leading-relaxed mb-6">Rasakan kebugaran optimal bersama terapis andalan. Dapatkan harga khusus booking via web.</p>
                                             </div>
                                             <div className="bg-white/5 border border-brandGold/20 p-4 rounded-2xl">
                                                 <h4 className="text-xs font-bold text-brandGold uppercase tracking-widest mb-2 flex items-center gap-1.5"><TrendingUp size={14} /> Daftar Harga Sesi (1 Jam)</h4>
@@ -1247,9 +1435,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* PROMOS VIEW                          */}
-                        {/* ==================================== */}
                         {currentPage === 'promos' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1295,9 +1480,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* HEALTHY BLOG ARTICLES VIEW           */}
-                        {/* ==================================== */}
                         {currentPage === 'articles' && (
                             <div className="py-16 sm:py-24 bg-brandCream">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1356,9 +1538,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* FRANCHISE & PARTNERSHIPS VIEW        */}
-                        {/* ==================================== */}
                         {currentPage === 'franchise' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1389,9 +1568,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* HEADQUARTERS CONTACTS VIEW           */}
-                        {/* ==================================== */}
                         {currentPage === 'contact' && (
                             <div className="py-16 sm:py-24 bg-brandCream">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1425,9 +1601,6 @@
                             </div>
                         )}
 
-                        {/* ==================================== */}
-                        {/* ADMIN DASHBOARD VIEW (PROTECTED)     */}
-                        {/* ==================================== */}
                         {currentPage === 'admin' && (
                             <div className="py-16 sm:py-24 bg-slate-900 text-slate-100 min-h-screen">
                                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1438,7 +1611,7 @@
                                                 <Lock size={22} className="text-brandGold" />
                                             </div>
                                             <h3 className="font-serif text-2xl font-bold text-slate-100 mb-2">Akses Terbatas Admin</h3>
-                                            <p className="text-xs text-slate-400 mb-6">Masukkan kata sandi admin untuk mengelola harga, cabang, dan pengaturan template pesan WhatsApp.</p>
+                                            <p className="text-xs text-slate-400 mb-6">Masukkan kata sandi admin untuk mengelola harga, cabang, dan Firebase Cloud Sync.</p>
                                             
                                             <form onSubmit={handleAdminLogin} className="space-y-4">
                                                 <input 
@@ -1446,11 +1619,18 @@
                                                     required 
                                                     value={adminPassword} 
                                                     onChange={(e) => setAdminPassword(e.target.value)} 
-                                                    placeholder="Kata sandi (Ketik: griyabugar)" 
+                                                    placeholder="Kata sandi: griyabugar" 
                                                     className="w-full px-4 py-3 rounded-xl border border-slate-700 text-slate-900 focus:ring-2 focus:ring-brandGold transition-all text-center text-sm font-semibold" 
                                                 />
                                                 {adminError && <p className="text-xs text-rose-500 font-semibold">{adminError}</p>}
                                                 <button type="submit" className="w-full bg-brandGold hover:bg-brandGoldDark text-slate-950 font-bold py-3 rounded-xl transition-all uppercase tracking-wider text-xs">Buka Dashboard</button>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => { setAdminPassword('griyabugar'); setAdminAuthenticated(true); setAdminError(''); showToast("Login Berhasil", "Masuk dengan Mode Akses Cepat.", "success"); }}
+                                                    className="w-full bg-slate-700/60 hover:bg-slate-700 text-slate-300 font-semibold py-2.5 rounded-xl transition text-xs border border-slate-600 flex items-center justify-center gap-1.5 mt-2"
+                                                >
+                                                    <Lock size={12} className="text-brandGold" /> Masuk Langsung (Auto Password)
+                                                </button>
                                             </form>
                                         </div>
                                     ) : (
@@ -1459,46 +1639,104 @@
                                             <div className="bg-slate-800 rounded-3xl p-6 border border-slate-700 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <span className="bg-emerald-500/20 text-emerald-400 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[9px]"><ShieldCheck size={10} className="inline mr-1" /> Authorized Session</span>
-                                                        <span className="text-xs text-slate-400">ID: Admin Pusat Griya Bugar</span>
+                                                        <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[9px] ${isFirebaseConnected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                                                            {isFirebaseConnected ? <><Cloud size={10} className="inline mr-1" /> Firebase Cloud Connected</> : <><HardDrive size={10} className="inline mr-1" /> Running Local Mode</>}
+                                                        </span>
                                                     </div>
-                                                    <h3 className="font-serif text-2xl font-bold text-slate-100 mt-2">Dashboard Pengaturan & Sesi Booking</h3>
+                                                    <h3 className="font-serif text-2xl font-bold text-slate-100 mt-2">Dashboard Admin Griya Bugar</h3>
                                                 </div>
-                                                <button onClick={() => { setAdminAuthenticated(false); setAdminPassword(''); }} className="bg-slate-700 hover:bg-rose-950 hover:text-rose-400 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl transition">Keluar / Kunci Sesi</button>
+                                                <button onClick={() => { setAdminAuthenticated(false); setAdminPassword(''); }} className="bg-slate-700 hover:bg-rose-950 hover:text-rose-400 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl transition">Keluar Sesi</button>
                                             </div>
 
-                                            {/* CONFIG SECTION 1: GLOBAL SETTINGS */}
+                                            {/* BOOKING HISTORY LOG */}
+                                            <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-4">
+                                                <div className="flex justify-between items-center border-b border-slate-700 pb-4">
+                                                    <div>
+                                                        <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><BookOpen size={18} /> Log Riwayat Pesanan Masuk ({bookingLogs.length})</h4>
+                                                        <p className="text-xs text-slate-400 mt-0.5">Daftar transaksi booking online yang tersimpan {isFirebaseConnected ? "di Firestore Cloud Database." : "secara lokal di memori browser."}</p>
+                                                    </div>
+                                                    {bookingLogs.length > 0 && (
+                                                        <button onClick={clearBookingLogs} className="bg-rose-900/50 hover:bg-rose-900 text-rose-300 text-xs px-3 py-1.5 rounded-lg border border-rose-700 transition"><Trash2 size={12} className="inline mr-1" /> Hapus Log</button>
+                                                    )}
+                                                </div>
+
+                                                {bookingLogs.length === 0 ? (
+                                                    <p className="text-xs text-slate-500 italic py-6 text-center">Belum ada riwayat pesanan masuk.</p>
+                                                ) : (
+                                                    <div className="overflow-x-auto border border-slate-700 rounded-2xl text-xs">
+                                                        <table className="w-full text-left">
+                                                            <thead className="bg-slate-900 text-slate-300 font-bold uppercase">
+                                                                <tr>
+                                                                    <th className="px-4 py-3">Kode / Waktu</th>
+                                                                    <th className="px-4 py-3">Pelanggan</th>
+                                                                    <th className="px-4 py-3">Cabang</th>
+                                                                    <th className="px-4 py-3">Jadwal Sesi</th>
+                                                                    <th className="px-4 py-3">Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-slate-800 text-slate-300">
+                                                                {bookingLogs.map((log, idx) => (
+                                                                    <tr key={idx} className="hover:bg-slate-800/40 transition">
+                                                                        <td className="px-4 py-3">
+                                                                            <span className="font-mono text-brandGold font-bold">{log.code}</span>
+                                                                            <p className="text-[10px] text-slate-500">{log.timestamp}</p>
+                                                                        </td>
+                                                                        <td className="px-4 py-3 font-medium">
+                                                                            {log.customerName}
+                                                                            <p className="text-[10px] text-slate-400">{log.customerPhone}</p>
+                                                                        </td>
+                                                                        <td className="px-4 py-3">{log.branchName}</td>
+                                                                        <td className="px-4 py-3">
+                                                                            {log.date} @ {log.time} WIB
+                                                                            <p className="text-[10px] text-brandGold">{log.service}</p>
+                                                                        </td>
+                                                                        <td className="px-4 py-3 font-mono font-bold text-emerald-400">{formatIDR(log.totalPrice)}</td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* FIREBASE CONFIGURATION FORM */}
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-6">
                                                 <div className="border-b border-slate-700 pb-4">
-                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><Settings size={18} /> 1. Konfigurasi WhatsApp Center & Kode Booking</h4>
-                                                    <p className="text-xs text-slate-400 mt-1">Ganti nomor WhatsApp dan format draf pesan pemesanan otomatis.</p>
+                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><Settings size={18} /> Konfigurasi Cloud Firebase & WhatsApp Center</h4>
                                                 </div>
+                                                
                                                 <form onSubmit={handleSaveSettings} className="space-y-4 text-slate-300">
                                                     <div className="space-y-1.5">
-                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Nomor WhatsApp Center (Gunakan kode negara, tanpa '+' or '0')</label>
-                                                        <input type="text" required value={tempSettings.whatsapp} onChange={(e) => setTempSettings({ ...tempSettings, whatsapp: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-sm font-semibold" placeholder="Contoh: 628123456789" />
+                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Nomor WhatsApp Center</label>
+                                                        <input type="text" required value={tempSettings.whatsapp} onChange={(e) => setTempSettings({ ...tempSettings, whatsapp: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-sm font-semibold" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Template Draf Pesan</label>
-                                                        <textarea rows={6} required value={tempSettings.template} onChange={(e) => setTempSettings({ ...tempSettings, template: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-xs font-mono" />
+                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Template Draf Pesan WA</label>
+                                                        <textarea rows={5} required value={tempSettings.template} onChange={(e) => setTempSettings({ ...tempSettings, template: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-xs font-mono" />
                                                     </div>
-                                                    <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/80 text-[11px] text-slate-400 space-y-1">
-                                                        <span className="font-bold text-brandGold block mb-1">Panduan Penggantian Tag Pintasan:</span>
-                                                        <p>• <span className="text-white font-mono">[KODE]</span> : Kode booking unik otomatis yang berbeda setiap kali pemesanan.</p>
-                                                        <p>• <span className="text-white font-mono">[NAMA]</span> : Nama lengkap pemesan.</p>
-                                                        <p>• <span className="text-white font-mono">[TELEPON]</span> : Nomor WA aktif pemesan.</p>
-                                                        <p>• <span className="text-white font-mono">[CABANG]</span> : Cabang tujuan reservasi.</p>
-                                                        <p>• <span className="text-white font-mono">[TANGGAL]</span> / <span className="text-white font-mono">[JAM]</span> : Waktu kedatangan sesi.</p>
-                                                    </div>
-                                                    <button type="submit" className="bg-brandGold hover:bg-brandGoldDark text-slate-950 font-bold px-6 py-3 rounded-xl text-xs transition uppercase flex items-center gap-1.5"><Save size={14} /> Simpan Konfigurasi</button>
+                                                    <button type="submit" className="bg-brandGold hover:bg-brandGoldDark text-slate-950 font-bold px-6 py-3 rounded-xl text-xs transition uppercase flex items-center gap-1.5"><Save size={14} /> Simpan Pengaturan WA</button>
                                                 </form>
+
+                                                <div className="pt-6 border-t border-slate-700 space-y-3">
+                                                    <h5 className="font-bold text-xs text-brandGold uppercase tracking-wider">Input Konfigurasi Firebase JSON</h5>
+                                                    <p className="text-xs text-slate-400">Tempelkan objek `firebaseConfig` Anda di sini jika ingin mengubah database secara langsung:</p>
+                                                    <form onSubmit={handleSaveCustomFirebaseConfig} className="space-y-3">
+                                                        <textarea 
+                                                            rows={4} 
+                                                            value={customFbConfig} 
+                                                            onChange={(e) => setCustomFbConfig(e.target.value)} 
+                                                            placeholder='{"apiKey": "AIzaSy...", "authDomain": "...", "projectId": "..."}' 
+                                                            className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 text-xs font-mono text-slate-300 focus:ring-2 focus:ring-brandGold" 
+                                                        />
+                                                        <button type="submit" className="bg-slate-700 hover:bg-slate-600 text-white font-bold px-4 py-2 rounded-xl text-xs transition">Simpan Firebase Config</button>
+                                                    </form>
+                                                </div>
                                             </div>
 
-                                            {/* CONFIG SECTION 2: REGIONAL BRANCHES MANAGER */}
+                                            {/* BRANCHES MANAGER */}
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-6">
                                                 <div className="border-b border-slate-700 pb-4">
-                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><MapPin size={18} /> 2. Pengelolaan Cabang & Harga Khusus Web</h4>
-                                                    <p className="text-xs text-slate-400 mt-1">Tambah, perbarui, dan hapus harga regional cabang.</p>
+                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><MapPin size={18} /> Pengelolaan Cabang & Harga Sesi</h4>
                                                 </div>
 
                                                 <form onSubmit={handleAddBranch} className="bg-slate-900 p-4 rounded-2xl border border-slate-700 grid grid-cols-1 md:grid-cols-5 gap-4 items-end text-xs text-slate-800">
@@ -1521,7 +1759,7 @@
                                                         <input type="text" required value={newBranch.address} onChange={(e) => setNewBranch({ ...newBranch, address: e.target.value })} placeholder="Alamat cabang" className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white focus:ring-1 focus:ring-brandGold" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="text-slate-400 font-bold uppercase">Nomor WA Khusus</label>
+                                                        <label className="text-slate-400 font-bold uppercase">Nomor WA Cabang</label>
                                                         <input type="text" required value={newBranch.phone} onChange={(e) => setNewBranch({ ...newBranch, phone: e.target.value })} placeholder="Nomor WA Cabang" className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white focus:ring-1 focus:ring-brandGold" />
                                                     </div>
                                                     <div className="space-y-1.5 flex gap-2">
@@ -1535,12 +1773,12 @@
 
                                                 <div className="overflow-x-auto border border-slate-700 rounded-2xl text-xs">
                                                     <table className="w-full text-left">
-                                                        <thead className="bg-slate-900 text-slate-300 font-bold uppercase tracking-wider">
+                                                        <thead className="bg-slate-900 text-slate-300 font-bold uppercase">
                                                             <tr>
                                                                 <th className="px-4 py-3">Cabang</th>
                                                                 <th className="px-4 py-3">Wilayah</th>
                                                                 <th className="px-4 py-3">Alamat</th>
-                                                                <th className="px-4 py-3">Harga Web (1 Jam)</th>
+                                                                <th className="px-4 py-3">Harga Web</th>
                                                                 <th className="px-4 py-3 text-right">Aksi</th>
                                                             </tr>
                                                         </thead>
@@ -1590,7 +1828,6 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-
                                             </div>
 
                                         </div>
@@ -1636,6 +1873,7 @@
                             </div>
                         </div>
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-brandCream/60 gap-4">
+                            {/* SECRET ADMIN ACCESS METHOD 3: Double Click on Copyright Text */}
                             <p 
                                 onDoubleClick={() => {
                                     setCurrentPage('admin');
@@ -1664,7 +1902,6 @@
                                     <p className="text-xs text-slate-500 mt-1">{currentLang === 'id' ? 'Satu langkah lagi untuk melakukan konfirmasi pemesanan ke cabang Griya Bugar.' : 'One final step to submit and confirm your booking with Griya Bugar branch.'}</p>
                                 </div>
 
-                                {/* PREMIUM KODE BOOKING VISUAL CARD */}
                                 <div className="bg-brandCream border border-brandGold/30 p-4 rounded-2xl mb-4 text-center">
                                     <span className="text-[10px] font-bold text-brandBrown/60 uppercase tracking-widest block mb-1">
                                         {TRANSLATIONS[currentLang].booking_code_label}
