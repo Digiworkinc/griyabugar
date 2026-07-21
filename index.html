@@ -11,7 +11,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400..900;1,400..900&family=Poppins:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- FontAwesome Support -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -83,9 +83,6 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // =========================================================================
-        // KONFIGURASI FIREBASE RESMI GRIYA BUGAR
-        // =========================================================================
         const MANUAL_FIREBASE_CONFIG = {
             apiKey: "AIzaSyCYh-z17SfQJkugBZjQfrdIfSpn2D4n3e0",
             authDomain: "griya-bugar-app.firebaseapp.com",
@@ -96,7 +93,6 @@
             measurementId: "G-FB7RSHC3E7"
         };
 
-        // Custom Inline Icons utilizing FontAwesome internally
         const MapPin = ({ className = "", size = 20 }) => <i className={`fa-solid fa-map-pin ${className}`} style={{ fontSize: size }}></i>;
         const Calendar = ({ className = "", size = 20 }) => <i className={`fa-solid fa-calendar ${className}`} style={{ fontSize: size }}></i>;
         const Clock = ({ className = "", size = 20 }) => <i className={`fa-solid fa-clock ${className}`} style={{ fontSize: size }}></i>;
@@ -239,43 +235,36 @@
             const [settings, setSettings] = useState(DEFAULT_SETTINGS);
             const [bookingLogs, setBookingLogs] = useState([]);
             
-            // Firebase State & Connection Indicator
             const [fb, setFb] = useState(null);
             const [isFirebaseConnected, setIsFirebaseConnected] = useState(false);
             const [customFbConfig, setCustomFbConfig] = useState(JSON.stringify(MANUAL_FIREBASE_CONFIG, null, 2));
 
-            // UI States
             const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
             const [isWaWidgetOpen, setIsWaWidgetOpen] = useState(false);
             const [isLocationPromptOpen, setIsLocationPromptOpen] = useState(false);
             const [isLocationRecommended, setIsLocationRecommended] = useState(false);
             const [selectedBranchId, setSelectedBranchId] = useState('jogja-pakuningratan');
             
-            // Hidden Admin Access Gesture Counter
             const [logoClickCount, setLogoClickCount] = useState(0);
 
-            // Custom dialog modal & toast
             const [dialogConfig, setDialogConfig] = useState(null); 
             const [toast, setToast] = useState(null); 
 
-            // Booking Form State
             const [formData, setFormData] = useState({
                 name: '',
                 phone: '',
                 branchId: 'jogja-pakuningratan',
                 date: '',
                 time: '',
-                service: 'Pijat Tradisional Sehat',
+                service: 'Pijat Tradisional & Shiatsu',
                 notes: ''
             });
             const [successBooking, setSuccessBooking] = useState(null);
 
-            // Admin Authentication State
             const [adminAuthenticated, setAdminAuthenticated] = useState(false);
             const [adminPassword, setAdminPassword] = useState('');
             const [adminError, setAdminError] = useState('');
 
-            // Admin Dashboard Form Fields
             const [newBranch, setNewBranch] = useState({ name: '', region: 'Yogyakarta', price: '', address: '', phone: '082124499924' });
             const [editingBranchId, setEditingBranchId] = useState(null);
             const [editingBranchData, setEditingBranchData] = useState({ name: '', region: '', price: '', address: '', phone: '' });
@@ -307,7 +296,6 @@
                 });
             };
 
-            // SECRET ADMIN ACCESS METHOD 1: Keyboard Shortcut (Ctrl + Shift + A / Cmd + Shift + A)
             useEffect(() => {
                 const handleKeyDown = (e) => {
                     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
@@ -320,7 +308,6 @@
                 return () => window.removeEventListener('keydown', handleKeyDown);
             }, []);
 
-            // SECRET ADMIN ACCESS METHOD 2: Triple Click on Logo within 1 second
             const handleLogoTripleClick = () => {
                 setLogoClickCount(prev => prev + 1);
             };
@@ -336,7 +323,6 @@
                 return () => clearTimeout(timer);
             }, [logoClickCount]);
 
-            // URL Hash Change Listener (Secret Admin Route: #admin)
             useEffect(() => {
                 const handleHashChange = () => {
                     if (window.location.hash === '#admin') {
@@ -354,7 +340,6 @@
                 let unsubBranches, unsubSettings, unsubBookings;
 
                 const initAppAndFirebase = async () => {
-                    // 1. Load Local Storage Backup
                     const localBranches = localStorage.getItem('gb_branches_v5');
                     const localSettings = localStorage.getItem('gb_settings_v5');
                     const localBookings = localStorage.getItem('gb_bookings_v5');
@@ -366,10 +351,8 @@
                     }
                     if (localBookings) setBookingLogs(JSON.parse(localBookings));
 
-                    // 2. Initialize Firebase Cloud Sync
                     try {
                         let firebaseConfig = MANUAL_FIREBASE_CONFIG;
-
                         if (!firebaseConfig) {
                             if (typeof __firebase_config !== 'undefined' && __firebase_config) {
                                 firebaseConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config;
@@ -404,7 +387,6 @@
                             setFb({ db, auth, appId });
                             setIsFirebaseConnected(true);
 
-                            // Real-time Firestore Branches Listener
                             const branchesRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('branches');
                             unsubBranches = branchesRef.onSnapshot((snap) => {
                                 if (snap.empty) {
@@ -416,7 +398,6 @@
                                 }
                             }, console.error);
 
-                            // Real-time Firestore Settings Listener
                             const settingsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('settings');
                             unsubSettings = settingsRef.onSnapshot((snap) => {
                                 const configDoc = snap.docs.find(d => d.id === 'config');
@@ -430,7 +411,6 @@
                                 }
                             }, console.error);
 
-                            // Real-time Firestore Booking Logs Listener
                             const bookingsRef = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('bookings');
                             unsubBookings = bookingsRef.onSnapshot((snap) => {
                                 const loadedBookings = snap.docs.map(doc => ({ fbId: doc.id, ...doc.data() }));
@@ -485,9 +465,8 @@
                 }
                 const today = new Date();
                 const datePart = today.getFullYear() + 
-                                 String(today.getMonth() + 1).padStart(2, '0') + 
-                                 String(today.getDate()).padStart(2, '0');
-                
+                               String(today.getMonth() + 1).padStart(2, '0') + 
+                               String(today.getDate()).padStart(2, '0');
                 return `GB-${datePart}-${randomPart}`;
             };
 
@@ -535,7 +514,6 @@
                     notes: formData.notes || '-'
                 };
 
-                // Save transaction to Firestore Cloud Database
                 if (fb && isFirebaseConnected) {
                     fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('bookings').add(bookingRecord);
                 } else {
@@ -706,7 +684,6 @@
             return (
                 <div className="flex flex-col min-h-screen">
                     
-                    {/* TOAST NOTIFICATION */}
                     {toast && (
                         <div className="fixed top-4 right-4 left-4 sm:left-auto sm:right-6 z-50 pointer-events-none flex flex-col max-w-sm mx-auto sm:mx-0">
                             <div className={`bg-brandBrown text-white border-l-4 ${toast.type === 'success' ? 'border-brandGold' : 'border-rose-500'} p-4 rounded-2xl shadow-2xl flex items-start gap-3 pointer-events-auto transition-all`}>
@@ -719,7 +696,6 @@
                         </div>
                     )}
 
-                    {/* CUSTOM POPUP DIALOG MODAL */}
                     {dialogConfig && (
                         <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex justify-center items-center p-4">
                             <div className="bg-white rounded-3xl max-w-md w-full p-6 border border-brandGold/20 shadow-2xl text-center">
@@ -748,7 +724,6 @@
                         </div>
                     )}
 
-                    {/* GEOLOCATION NOTIFIER */}
                     {isLocationPromptOpen && (
                         <div className="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto z-40 max-w-sm bg-white border border-brandGold/30 rounded-2xl p-5 shadow-2xl transition-all">
                             <div className="flex items-start gap-4">
@@ -781,7 +756,6 @@
                         </div>
                     )}
 
-                    {/* SUGGESTED LOCAL BRANCH DRAWER */}
                     {isLocationRecommended && (
                         <div className="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto z-45 max-w-xs bg-brandBrown text-white rounded-2xl p-4 shadow-2xl border border-brandGold/40 mx-auto sm:mx-0">
                             <div className="flex justify-between items-start">
@@ -815,7 +789,6 @@
                         </div>
                     )}
 
-                    {/* FLOATING WHATSAPP ROSTERS */}
                     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
                         <button 
                             onClick={() => setIsWaWidgetOpen(!isWaWidgetOpen)} 
@@ -855,7 +828,6 @@
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex items-center justify-between h-20 sm:h-24">
                                 
-                                {/* Logo (Clickable for Home + Secret Triple-Click for Admin Access) */}
                                 <div 
                                     className="flex-shrink-0 cursor-pointer py-1 focus:outline-none flex items-center gap-2 select-none" 
                                     onClick={() => {
@@ -922,7 +894,6 @@
                         )}
                     </header>
 
-                    {/* MAIN CONTENT VIEWS */}
                     <main className="flex-grow">
                         
                         {currentPage === 'home' && (
@@ -984,9 +955,9 @@
                                     </div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                                         {[
-                                            { icon: 'fa-spa', title_id: 'Pijat Tradisional Sehat', title_en: 'Healthy Traditional Massage', desc_id: 'Terapi pemijatan seluruh tubuh dengan teknik tradisional legendaris. Menghilangkan pegal otot secara efektif.', desc_en: 'Whole-body therapeutic massage using legendary traditional massage protocols.' },
-                                            { icon: 'fa-shoe-prints', title_id: 'Reflexology & Acupressure', title_en: 'Reflexology & Acupressure', desc_id: 'Stimulasi akupresur pada titik syaraf kaki guna memperlancar peredaran darah.', desc_en: 'Acupressure therapy on crucial foot meridian lines to boost circulation.' },
-                                            { icon: 'fa-person-running', title_id: 'Sport Recovery Massage', title_en: 'Sport Recovery Massage', desc_id: 'Terapi deep tissue bertekanan khusus mempercepat pemulihan otot pasca olahraga.', desc_en: 'Deep tissue therapy formulated for lactic acid release post workout.' },
+                                            { icon: 'fa-spa', title_id: 'Pijat Tradisional & Shiatsu', title_en: 'Traditional & Shiatsu Massage', desc_id: 'Teknik urut jawa dengan tangan menggunakan minyak, terkombinasi penekanan dan urut, dengan tehnik injakan kaki dan pijatan akupresur.', desc_en: 'Whole-body therapeutic massage using legendary traditional massage protocols.' },
+                                            { icon: 'fa-shoe-prints', title_id: 'Refleksi Kaki', title_en: 'Foot Reflexology', desc_id: 'Pijat ini menggunakan tehnik penekanan di titik titik saraf tertentu terutama di bagian kaki.', desc_en: 'Acupressure therapy on crucial foot meridian lines to boost circulation.' },
+                                            { icon: 'fa-person-running', title_id: 'Thai Massage', title_en: 'Thai Massage', desc_id: 'Pijat kering tanpa minyak, dengan tehnik stretching seperti yoga pasif.', desc_en: 'Dry massage with stretching techniques like passive yoga.' },
                                             { icon: 'fa-building', title_id: 'Corporate Wellness', title_en: 'Corporate Wellness', desc_id: 'Paket kebugaran kantor untuk meningkatkan kebugaran tim kerja mencegah kejenuhan.', desc_en: 'On-site package to improve employee health and reduce burnout.' }
                                         ].map((lay, idx) => (
                                             <div key={idx} className="bg-white border border-brandGold/10 rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between min-h-[300px]">
@@ -1003,11 +974,10 @@
                                     </div>
                                 </div>
 
-                                {/* PREMIUM LOOKBOOK GALLERY */}
                                 <div className="bg-brandBrown text-white py-16 sm:py-24">
                                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                         <div className="text-center max-w-3xl mx-auto mb-16">
-                                            <span className="text-brandGold font-semibold text-xs uppercase tracking-[0.2em]">OFFICIAL LOOKBOOK GALLERY (CamScanner PDF)</span>
+                                            <span className="text-brandGold font-semibold text-xs uppercase tracking-[0.2em]">OFFICIAL LOOKBOOK GALLERY</span>
                                             <h2 className="font-serif text-2xl sm:text-4xl text-brandCream mt-2 font-normal">{currentLang === 'id' ? 'Galeri Suasana & Layanan Premium' : 'Premium Ambiance & Treatment Gallery'}</h2>
                                             <div className="w-16 h-[2px] bg-brandGold mx-auto mt-4"></div>
                                         </div>
@@ -1033,7 +1003,6 @@
                                     </div>
                                 </div>
 
-                                {/* NATIONAL BRANCH DIRECTORY PREVIEW */}
                                 <div className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
                                         <div>
@@ -1122,9 +1091,42 @@
                                     </div>
                                     <div className="space-y-16">
                                         {[
-                                            { name: 'Pijat Tradisional Sehat (Signature)', duration: '90 Menit', desc_id: 'Paket andalan legendaris kami yang mencakup pijatan seluruh tubuh, termasuk pijat wajah, kepala, dan pundak yang cukup lama. Pelanggan dapat meminta terapi pijat injak (back-stepping) dengan pilihan kekuatan tekanan (low, medium, super power) dari terapis ahli kami.', features: ['Minyak Kelapa Hangat Base', 'Pijat Kepala & Wajah Lama', 'Opsi Pijat Injak Punggung', 'Wedang Jahe Hangat & Cemilan'] },
-                                            { name: 'Reflexology & Acupressure', duration: '60 Menit', desc_id: 'Terapi refleksi terfokus pada kaki dan tungkai bawah untuk mengaktifkan kembali simpul syaraf meridian yang letih. Dipadukan dengan usapan handuk hangat bersih dan teh jahe penyegar tubuh.', features: ['Rendaman Handuk Hangat', 'Akupresur Titik Refleksi', 'Melancarkan Sirkulasi Darah', 'Lotion Pijat Lembut'] },
-                                            { name: 'Sport Recovery & Deep Tissue', duration: '120 Menit', desc_id: 'Didesain khusus untuk Anda yang aktif bergerak atau berolahraga berat. Pemijatan bertekanan pas menyasar otot dalam yang kaku, merelaksasi simpul fascia, dan mengembalikan kelenturan sendi.', features: ['Tekanan Dalam (Deep Tissue)', 'Pelemasan Otot Kaku', 'Fasilitas Mandi Air Panas', 'Wedang Jahe & Snack Enak'] }
+                                            { 
+                                                name: 'Pijat Tradisional & Shiatsu', 
+                                                duration: '90 Menit', 
+                                                desc_id: 'Teknik urut jawa dengan tangan menggunakan minyak, terkombinasi penekanan dan urut, dengan tehnik injakan kaki dan pijatan dengan tekanan jari/telapak di titik akupresur tubuh.', 
+                                                features: [
+                                                    'Ngilangin pegal-pegal Lelah letih dan lesu',
+                                                    'Melancarkan peredaran darah',
+                                                    'Bikin otot kaku jadi lemas lagi',
+                                                    'Redain stres & tegang di leher-pundak',
+                                                    'Bantu atasi sakit kepala tegang & insomnia',
+                                                    'Seimbangin energi tubuh, badan berasa “enteng”',
+                                                    'Sangat cocok untuk capek kerja keseharian'
+                                                ] 
+                                            },
+                                            { 
+                                                name: 'Refleksi Kaki', 
+                                                duration: '60 Menit', 
+                                                desc_id: 'Pijat ini menggunakan tehnik penekanan di titik titik saraf tertentu terutama di bagian kaki.', 
+                                                features: [
+                                                    'Memberikan efek relaksasi dan mengurangi tingkat kecemasan.',
+                                                    'Membantu meredakan sakit kepala dan nyeri.',
+                                                    'Melancarkan sirkulasi darah dan oksigen.',
+                                                    'Meningkatkan kualitas tidur.'
+                                                ] 
+                                            },
+                                            { 
+                                                name: 'Thai Massage', 
+                                                duration: '90 Menit / 120 Menit', 
+                                                desc_id: 'Pijat kering tanpa minyak, dengan tehnik stretching seperti yoga pasif lebih banyak penekan tarikan dan tekuk.', 
+                                                features: [
+                                                    'Nambah kelenturan & postur tubuh',
+                                                    'Ngurangin kaku sendi & nyeri punggung bawah',
+                                                    'Nambah energi karena alur “sen” dibuka',
+                                                    'Sangat cocok untuk capek olahraga'
+                                                ] 
+                                            }
                                         ].map((lay, idx) => (
                                             <div key={idx} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 grid grid-cols-1 lg:grid-cols-12 border border-brandGold/10">
                                                 <div className="lg:col-span-5 h-64 lg:h-auto relative">
@@ -1266,7 +1268,6 @@
                                             </div>
                                         </div>
 
-                                        {/* Direct Booking Drawer for selected branch */}
                                         <div className="bg-white rounded-3xl p-6 sm:p-12 border border-brandGold/15 shadow-xl max-w-4xl mx-auto">
                                             <div className="text-center max-w-lg mx-auto mb-10">
                                                 <h3 className="font-serif text-xl sm:text-2xl text-brandBrown">{TRANSLATIONS[currentLang].form_booking_title}</h3>
@@ -1298,9 +1299,9 @@
                                                     <div className="space-y-1.5">
                                                         <label className="font-semibold block">Pilih Jenis Layanan <span className="text-rose-500">*</span></label>
                                                         <select name="service" required value={formData.service} onChange={handleInputChange} className="w-full bg-brandCream border border-brandGold/20 rounded-xl p-3.5 focus:outline-none focus:ring-2 focus:ring-brandGold/20 min-h-[48px]">
-                                                            <option value="Pijat Tradisional Sehat">Pijat Tradisional Sehat</option>
-                                                            <option value="Reflexology & Acupressure">Reflexology & Acupressure</option>
-                                                            <option value="Sport Recovery & Deep Tissue">Sport Recovery & Deep Tissue</option>
+                                                            <option value="Pijat Tradisional & Shiatsu">Pijat Tradisional & Shiatsu</option>
+                                                            <option value="Refleksi Kaki">Refleksi Kaki</option>
+                                                            <option value="Thai Massage">Thai Massage</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -1406,9 +1407,9 @@
                                                 <div className="space-y-1.5">
                                                     <label className="text-xs font-bold text-brandBrown/80 uppercase block">Jenis Layanan</label>
                                                     <select name="service" required value={formData.service} onChange={handleInputChange} className="w-full px-4 py-3 rounded-xl border border-brandGold/20 focus:ring-2 focus:ring-brandGold/20 bg-brandCream focus:bg-white text-sm">
-                                                        <option value="Pijat Tradisional Sehat">Pijat Tradisional Sehat</option>
-                                                        <option value="Reflexology & Acupressure">Reflexology & Acupressure</option>
-                                                        <option value="Sport Recovery & Deep Tissue">Sport Recovery & Deep Tissue</option>
+                                                        <option value="Pijat Tradisional & Shiatsu">Pijat Tradisional & Shiatsu</option>
+                                                        <option value="Refleksi Kaki">Refleksi Kaki</option>
+                                                        <option value="Thai Massage">Thai Massage</option>
                                                     </select>
                                                 </div>
                                                 <div className="space-y-1.5">
@@ -1648,7 +1649,6 @@
                                                 <button onClick={() => { setAdminAuthenticated(false); setAdminPassword(''); }} className="bg-slate-700 hover:bg-rose-950 hover:text-rose-400 text-slate-300 text-xs font-bold px-4 py-2 rounded-xl transition">Keluar Sesi</button>
                                             </div>
 
-                                            {/* BOOKING HISTORY LOG */}
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-4">
                                                 <div className="flex justify-between items-center border-b border-slate-700 pb-4">
                                                     <div>
@@ -1699,7 +1699,6 @@
                                                 )}
                                             </div>
 
-                                            {/* FIREBASE CONFIGURATION FORM */}
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-6">
                                                 <div className="border-b border-slate-700 pb-4">
                                                     <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><Settings size={18} /> Konfigurasi Cloud Firebase & WhatsApp Center</h4>
@@ -1719,7 +1718,6 @@
 
                                                 <div className="pt-6 border-t border-slate-700 space-y-3">
                                                     <h5 className="font-bold text-xs text-brandGold uppercase tracking-wider">Input Konfigurasi Firebase JSON</h5>
-                                                    <p className="text-xs text-slate-400">Tempelkan objek `firebaseConfig` Anda di sini jika ingin mengubah database secara langsung:</p>
                                                     <form onSubmit={handleSaveCustomFirebaseConfig} className="space-y-3">
                                                         <textarea 
                                                             rows={4} 
@@ -1733,7 +1731,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* BRANCHES MANAGER */}
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-6">
                                                 <div className="border-b border-slate-700 pb-4">
                                                     <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><MapPin size={18} /> Pengelolaan Cabang & Harga Sesi</h4>
@@ -1839,7 +1836,6 @@
 
                     </main>
 
-                    {/* FOOTER */}
                     <footer className="bg-brandBrown text-brandCream pt-16 pb-12 border-t border-brandGold/20 mt-auto">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 mb-8 border-b border-brandCream/10 text-xs sm:text-sm">
                             <div className="space-y-4">
@@ -1859,9 +1855,9 @@
                             <div className="space-y-4">
                                 <h4 className="font-serif text-brandGold text-base font-semibold">Menu Treatment</h4>
                                 <ul className="space-y-3 text-xs text-brandCream/80">
-                                    <li><button onClick={() => setCurrentPage('services')} className="hover:text-brandGold transition text-left">Pijat Tradisional Sehat (90 Mins)</button></li>
-                                    <li><button onClick={() => setCurrentPage('services')} className="hover:text-brandGold transition text-left">Reflexology & Acupressure (60 Mins)</button></li>
-                                    <li><button onClick={() => setCurrentPage('services')} className="hover:text-brandGold transition text-left">Sport Recovery & Deep Tissue (120 Mins)</button></li>
+                                    <li><button onClick={() => setCurrentPage('services')} className="hover:text-brandGold transition text-left">Pijat Tradisional & Shiatsu (90 Mins)</button></li>
+                                    <li><button onClick={() => setCurrentPage('services')} className="hover:text-brandGold transition text-left">Refleksi Kaki (60 Mins)</button></li>
+                                    <li><button onClick={() => setCurrentPage('services')} className="hover:text-brandGold transition text-left">Thai Massage (120 Mins)</button></li>
                                 </ul>
                             </div>
                             <div className="space-y-4">
@@ -1873,7 +1869,6 @@
                             </div>
                         </div>
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-brandCream/60 gap-4">
-                            {/* SECRET ADMIN ACCESS METHOD 3: Double Click on Copyright Text */}
                             <p 
                                 onDoubleClick={() => {
                                     setCurrentPage('admin');
@@ -1891,7 +1886,6 @@
                         </div>
                     </footer>
 
-                    {/* MODAL SUCCESS BOOKING DISPATCH DETAIL */}
                     {successBooking && (
                         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex justify-center items-center p-4">
                             <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-brandGold/20 shadow-2xl relative">
@@ -1935,7 +1929,6 @@
             );
         }
 
-        // Mount App to browser DOM
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
