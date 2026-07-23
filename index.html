@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
     <title>Griya Bugar - Pijat Benar Benar Pijat (Since 1998)</title>
     
+    <!-- SEO Meta Tags & Keywords -->
+    <meta name="description" content="Griya Bugar - Layanan pijat profesional Jogja, pijat panggilan Jogja 24 jam, massage Jogja, terapis pijat berpengalaman, pijat relaksasi, pijat olahraga, dan pijat terdekat Jogja sejak 1998." />
+    <meta name="keywords" content="Pijat profesional Jogja, Pijat panggilan Jogja, Massage Jogja, Terapis pijat Jogja, Pijat relaksasi Jogja, Pijat olahraga Jogja, Pijat wanita Jogja, Pijat pria Jogja, Pijat terdekat Jogja" />
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -16,7 +20,7 @@
     <!-- FontAwesome Support -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase Compat SDKs (Ultra Stable for Browser & GitHub Pages) -->
+    <!-- Firebase Compat SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -98,7 +102,7 @@
         const Clock = ({ className = "", size = 20 }) => <i className={`fa-solid fa-clock ${className}`} style={{ fontSize: size }}></i>;
         const User = ({ className = "", size = 20 }) => <i className={`fa-solid fa-user ${className}`} style={{ fontSize: size }}></i>;
         const Phone = ({ className = "", size = 20 }) => <i className={`fa-solid fa-phone ${className}`} style={{ fontSize: size }}></i>;
-        const Settings = ({ className = "", size = 20 }) => <i className={`fa-solid fa-gears ${className}`} style={{ fontSize: size }}></i>;
+        const SettingsIcon = ({ className = "", size = 20 }) => <i className={`fa-solid fa-gears ${className}`} style={{ fontSize: size }}></i>;
         const BookOpen = ({ className = "", size = 20 }) => <i className={`fa-solid fa-book-open ${className}`} style={{ fontSize: size }}></i>;
         const Plus = ({ className = "", size = 16 }) => <i className={`fa-solid fa-plus ${className}`} style={{ fontSize: size }}></i>;
         const Trash2 = ({ className = "", size = 16 }) => <i className={`fa-solid fa-trash-can ${className}`} style={{ fontSize: size }}></i>;
@@ -119,7 +123,7 @@
             <img 
                 src="ogo griya bugar.png" 
                 className={className} 
-                alt="Griya Bugar Massage - Shiatsu - Refleksi - Spa" 
+                alt="Griya Bugar Massage" 
                 onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = 'https://placehold.co/600x370/4A3728/C8A76A?text=GRIYA+BUGAR';
@@ -247,8 +251,8 @@
             
             const [logoClickCount, setLogoClickCount] = useState(0);
 
-            const [dialogConfig, setDialogConfig] = useState(null); 
-            const [toast, setToast] = useState(null); 
+            const [dialogConfig, setDialogConfig] = useState(null);
+            const [toast, setToast] = useState(null);
 
             const [formData, setFormData] = useState({
                 name: '',
@@ -269,6 +273,31 @@
             const [editingBranchId, setEditingBranchId] = useState(null);
             const [editingBranchData, setEditingBranchData] = useState({ name: '', region: '', price: '', address: '', phone: '' });
             const [tempSettings, setTempSettings] = useState(DEFAULT_SETTINGS);
+
+            // SEO Dynamic Page Title & Description Updater
+            useEffect(() => {
+                const seoTitles = {
+                    home: "Griya Bugar - Pijat Profesional Jogja | Massage Jogja Terbaik (Since 1998)",
+                    about: "Tentang Kami - Pijat Profesional Jogja & Terapis Pijat Terpercaya",
+                    services: "Layanan Pijat Relaksasi Jogja & Pijat Olahraga Jogja",
+                    branches: "Cabang Griya Bugar | Pijat Terdekat Jogja & Panggilan 24 Jam",
+                    booking: "Booking Online - Pijat Profesional Jogja & Massage Jogja",
+                    promos: "Promo Spesial Pijat Wanita & Pijat Pria Jogja",
+                    articles: "Artikel Kesehatan & Tips Terapis Pijat Jogja",
+                    franchise: "Waralaba & Kemitraan Pijat Profesional Jogja",
+                    contact: "Kontak Resmi Griya Bugar - Pijat Panggilan Jogja",
+                    admin: "Konsol Admin - Griya Bugar Indonesia"
+                };
+                
+                const currentTitle = seoTitles[currentPage] || seoTitles.home;
+                document.title = currentTitle;
+
+                // Update meta description dynamically if needed
+                let metaDesc = document.querySelector("meta[name='description']");
+                if (metaDesc) {
+                    metaDesc.setAttribute("content", `${currentTitle} - Nikmati layanan pijat profesional Jogja, massage Jogja, pijat relaksasi Jogja, dan terapis berpengalaman.`);
+                }
+            }, [currentPage]);
 
             const showToast = (title, message, type = 'success') => {
                 setToast({ title, message, type });
@@ -340,9 +369,9 @@
                 let unsubBranches, unsubSettings, unsubBookings;
 
                 const initAppAndFirebase = async () => {
-                    const localBranches = localStorage.getItem('gb_branches_v5');
-                    const localSettings = localStorage.getItem('gb_settings_v5');
-                    const localBookings = localStorage.getItem('gb_bookings_v5');
+                    const localBranches = localStorage.getItem('gb_branches_v6');
+                    const localSettings = localStorage.getItem('gb_settings_v6');
+                    const localBookings = localStorage.getItem('gb_bookings_v6');
 
                     if (localBranches) setBranches(JSON.parse(localBranches));
                     if (localSettings) {
@@ -394,7 +423,7 @@
                                 } else {
                                     const loadedBranches = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                                     setBranches(loadedBranches);
-                                    localStorage.setItem('gb_branches_v5', JSON.stringify(loadedBranches));
+                                    localStorage.setItem('gb_branches_v6', JSON.stringify(loadedBranches));
                                 }
                             }, console.error);
 
@@ -405,7 +434,7 @@
                                     const data = configDoc.data();
                                     setSettings(data);
                                     setTempSettings(data);
-                                    localStorage.setItem('gb_settings_v5', JSON.stringify(data));
+                                    localStorage.setItem('gb_settings_v6', JSON.stringify(data));
                                 } else if (snap.empty) {
                                     settingsRef.doc('config').set(DEFAULT_SETTINGS);
                                 }
@@ -416,7 +445,7 @@
                                 const loadedBookings = snap.docs.map(doc => ({ fbId: doc.id, ...doc.data() }));
                                 loadedBookings.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
                                 setBookingLogs(loadedBookings);
-                                localStorage.setItem('gb_bookings_v5', JSON.stringify(loadedBookings));
+                                localStorage.setItem('gb_bookings_v6', JSON.stringify(loadedBookings));
                             }, console.error);
                         }
                     } catch (err) {
@@ -519,7 +548,7 @@
                 } else {
                     const updatedLogs = [bookingRecord, ...bookingLogs];
                     setBookingLogs(updatedLogs);
-                    localStorage.setItem('gb_bookings_v5', JSON.stringify(updatedLogs));
+                    localStorage.setItem('gb_bookings_v6', JSON.stringify(updatedLogs));
                 }
                 
                 setSuccessBooking({
@@ -558,7 +587,7 @@
                     fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('settings').doc('config').set(tempSettings);
                 } else {
                     setSettings(tempSettings);
-                    localStorage.setItem('gb_settings_v5', JSON.stringify(tempSettings));
+                    localStorage.setItem('gb_settings_v6', JSON.stringify(tempSettings));
                 }
                 showToast("Pengaturan Disimpan", "Template WhatsApp dan nomor utama berhasil diperbarui.", "success");
             };
@@ -607,7 +636,7 @@
                 } else {
                     const updated = [...branches, branchPayload];
                     setBranches(updated);
-                    localStorage.setItem('gb_branches_v5', JSON.stringify(updated));
+                    localStorage.setItem('gb_branches_v6', JSON.stringify(updated));
                 }
 
                 setNewBranch({ name: '', region: 'Yogyakarta', price: '', address: '', phone: '082124499924' });
@@ -624,7 +653,7 @@
                         } else {
                             const updated = branches.filter(b => b.id !== id);
                             setBranches(updated);
-                            localStorage.setItem('gb_branches_v5', JSON.stringify(updated));
+                            localStorage.setItem('gb_branches_v6', JSON.stringify(updated));
                         }
                         showToast("Cabang Dihapus", `Cabang ${name} telah dihapus.`, "success");
                     }
@@ -654,7 +683,7 @@
                 } else {
                     const updated = branches.map(b => b.id === id ? { id, ...editingBranchData, price: priceNum } : b);
                     setBranches(updated);
-                    localStorage.setItem('gb_branches_v5', JSON.stringify(updated));
+                    localStorage.setItem('gb_branches_v6', JSON.stringify(updated));
                 }
                 
                 setEditingBranchId(null);
@@ -665,18 +694,22 @@
                 triggerConfirm(
                     "Hapus Riwayat Booking",
                     "Apakah Anda yakin ingin mengosongkan seluruh catatan log pemesanan?",
-                    () => {
+                    async () => {
                         if (fb && isFirebaseConnected) {
-                            bookingLogs.forEach(log => {
-                                if (log.fbId) {
-                                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('bookings').doc(log.fbId).delete();
-                                }
-                            });
-                        } else {
-                            setBookingLogs([]);
-                            localStorage.removeItem('gb_bookings_v5');
+                            try {
+                                const snapshot = await fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('bookings').get();
+                                const batch = fb.db.batch();
+                                snapshot.docs.forEach((doc) => {
+                                    batch.delete(doc.ref);
+                                });
+                                await batch.commit();
+                            } catch (err) {
+                                console.error("Error clearing Firebase bookings:", err);
+                            }
                         }
-                        showToast("Log Dibersihkan", "Riwayat pemesanan telah dikosongkan.", "success");
+                        setBookingLogs([]);
+                        localStorage.removeItem('gb_bookings_v6');
+                        showToast("Log Dibersihkan", "Riwayat pemesanan telah dikosongkan secara permanen.", "success");
                     }
                 );
             };
@@ -793,6 +826,7 @@
                         <button 
                             onClick={() => setIsWaWidgetOpen(!isWaWidgetOpen)} 
                             className="bg-emerald-600 hover:bg-emerald-700 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition relative group focus:outline-none"
+                            aria-label="WhatsApp Care"
                         >
                             <i className="fa-brands fa-whatsapp text-3xl"></i>
                         </button>
@@ -866,7 +900,7 @@
                                         <option value="id">ID</option>
                                         <option value="en">EN</option>
                                     </select>
-                                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-brandCream hover:text-brandGold p-2 transition focus:outline-none">
+                                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-brandCream hover:text-brandGold p-2 transition focus:outline-none" aria-label="Buka Menu">
                                         <i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-xl`}></i>
                                     </button>
                                 </div>
@@ -1701,7 +1735,7 @@
 
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-6">
                                                 <div className="border-b border-slate-700 pb-4">
-                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><Settings size={18} /> Konfigurasi Cloud Firebase & WhatsApp Center</h4>
+                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><SettingsIcon size={18} /> Konfigurasi Cloud Firebase & WhatsApp Center</h4>
                                                 </div>
                                                 
                                                 <form onSubmit={handleSaveSettings} className="space-y-4 text-slate-300">
@@ -1919,7 +1953,7 @@
                                     <a href={successBooking.link} target="_blank" rel="noopener noreferrer" onClick={() => setSuccessBooking(null)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl transition shadow-lg flex justify-center items-center gap-2 text-sm">
                                         Hubungkan ke WhatsApp Sekarang <ExternalLink size={14} />
                                     </a>
-                                    <button onClick={() => setSuccessBooking(null)} className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-2xl text-xs transition">Kembali, Ubah Data Booking</button>
+                                    <button onClick={() => setSuccessBooking(null)} className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-2xl text-xs transition">Kembali, Ubah Data Booking Logs</button>
                                 </div>
                             </div>
                         </div>
@@ -1929,8 +1963,7 @@
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
 </html>
