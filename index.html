@@ -79,7 +79,7 @@
     <!-- Target Div for React Mount -->
     <div id="root"></div>
 
-    <!-- React and Babel Dependencies for Single File Compilation -->
+    <!-- React and Babel Dependencies -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -135,11 +135,11 @@
             { id: 'jogja-pakuningratan', name: 'Pakuningratan', region: 'Yogyakarta', price: 127500, address: 'Jl. Pakuningratan No.3, Cokrodiningratan, Kec. Jetis, Kota Yogyakarta, DIY 55233', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '15 Terapis', serviceType: 'Home Service 24 Jam', spec: 'Balinese Heritage Warmth' },
             { id: 'jogja-maguwo', name: 'Maguwo', region: 'Yogyakarta', price: 127500, address: 'Jl. Ring Road Utara No. Kav. 27, Nayan, Maguwoharjo, Kec. Depok, Sleman, DIY', phone: '082124499924', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '12 Terapis', serviceType: 'Reflexology Area', spec: 'Authentic Deep Tissue' },
             { id: 'jogja-seturan', name: 'Seturan', region: 'Yogyakarta', price: 127500, address: 'Jl. Seturan Raya No. Kav. 99 B Lt.1, Kledokan, Caturtunggal, Kec. Depok, Sleman, DIY', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '14 Terapis', serviceType: 'Premium Lounge & Spa', spec: 'Modern Shiatsu Accupressure' },
-            { id: 'solo-baru', name: 'Solo Baru', region: 'Solo', price: 110000, address: 'Jl. Ir. Soekarno, Ruko Solo Baru Blok HH 36', phone: '0821-2449-9924', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '10 Terapis', serviceType: 'Family Wellness', spec: 'Traditional Herbal Warmth' },
+            { id: 'solo-baru', name: 'Solo Baru', region: 'Solo', price: 110000, address: 'Jl. Ir. Soekarno, Ruko Solo Baru Blok HH 36', phone: '082124499924', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '10 Terapis', serviceType: 'Family Wellness', spec: 'Traditional Herbal Warmth' },
             { id: 'solo-gede', name: 'Pasar Gede', region: 'Solo', price: 110000, address: 'Jl. Urip Sumoharjo No.62 B (Utara Pasar Gede)', phone: '082124499924', rating: '4.7 ★', hours: '09:00 - 22:00', therapists: '8 Terapis', serviceType: 'Traditional Focus', spec: 'Spinal Recovery Standard' },
             { id: 'malang-suhat', name: 'Soekarno Hatta (Suhat)', region: 'Malang', price: 115000, address: 'Jl. Soekarno Hatta, Ruko Taman Niaga Blok B 32-33', phone: '082124499924', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '12 Terapis', serviceType: 'Corporate Service', spec: 'Stress Relief Massage' },
             { id: 'malang-dieng', name: 'Istana Dieng (ISDI)', region: 'Malang', price: 115000, address: 'Jl. Istana Dieng Raya II No.5', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '9 Terapis', serviceType: 'VIP Room Available', spec: 'Anxiety Release Therapy' },
-            { id: 'semarang-pattimura', name: 'Pattimura', region: 'Semarang', price: 120000, address: 'Ruko Pattimura Plaza Blok 1 No.5', phone: '0882-0031-33789', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '11 Terapis', serviceType: 'Premium Lounge', spec: 'Authentic Reflexology' },
+            { id: 'semarang-pattimura', name: 'Pattimura', region: 'Semarang', price: 120000, address: 'Ruko Pattimura Plaza Blok 1 No.5', phone: '0882003133789', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '11 Terapis', serviceType: 'Premium Lounge', spec: 'Authentic Reflexology' },
             { id: 'semarang-siliwangi', name: 'Siliwangi', region: 'Semarang', price: 120000, address: 'Jl. Jendral Sudirman No.187, Ruko Siliwangi Plaza Blok E8, Semarang Barat', phone: '0882003133789', rating: '4.7 ★', hours: '09:00 - 22:00', therapists: '10 Terapis', serviceType: 'Corporate Discount', spec: 'Muscle Knot Release' },
             { id: 'semarang-mataram', name: 'Mataram', region: 'Semarang', price: 120000, address: 'Jl. Karang Wulan Utara No.09 (Samping Atlanta Elektronik)', phone: '0882003133789', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '13 Terapis', serviceType: 'Couple Room Suite', spec: 'Luxury Aromatherapy' },
             { id: 'bali-1', name: 'Kuta (Bali 1)', region: 'Bali', price: 140000, address: 'Jl. Bypass Ngurah Rai, Tuban, Kec. Kuta, Kabupaten Badung, Bali 80361', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '16 Terapis', serviceType: 'Tourist Wellness Specialist', spec: 'Full-Body Deep Relaxation' },
@@ -255,13 +255,8 @@
             const [toast, setToast] = useState(null);
 
             const [formData, setFormData] = useState({
-                name: '',
-                phone: '',
-                branchId: 'jogja-pakuningratan',
-                date: '',
-                time: '',
-                service: 'Pijat Tradisional & Shiatsu',
-                notes: ''
+                name: '', phone: '', branchId: 'jogja-pakuningratan',
+                date: '', time: '', service: 'Pijat Tradisional & Shiatsu', notes: ''
             });
             const [successBooking, setSuccessBooking] = useState(null);
 
@@ -292,7 +287,6 @@
                 const currentTitle = seoTitles[currentPage] || seoTitles.home;
                 document.title = currentTitle;
 
-                // Update meta description dynamically if needed
                 let metaDesc = document.querySelector("meta[name='description']");
                 if (metaDesc) {
                     metaDesc.setAttribute("content", `${currentTitle} - Nikmati layanan pijat profesional Jogja, massage Jogja, pijat relaksasi Jogja, dan terapis berpengalaman.`);
@@ -305,24 +299,11 @@
             };
 
             const triggerConfirm = (title, message, onConfirm) => {
-                setDialogConfig({
-                    title,
-                    message,
-                    showCancel: true,
-                    onConfirm: () => {
-                        onConfirm();
-                        setDialogConfig(null);
-                    }
-                });
+                setDialogConfig({ title, message, showCancel: true, onConfirm: () => { onConfirm(); setDialogConfig(null); } });
             };
 
             const triggerAlert = (title, message) => {
-                setDialogConfig({
-                    title,
-                    message,
-                    showCancel: false,
-                    onConfirm: () => setDialogConfig(null)
-                });
+                setDialogConfig({ title, message, showCancel: false, onConfirm: () => setDialogConfig(null) });
             };
 
             useEffect(() => {
@@ -359,7 +340,6 @@
                         showToast("Sistem Konsol", "Membuka halaman administrator pusat.", "success");
                     }
                 };
-
                 handleHashChange();
                 window.addEventListener('hashchange', handleHashChange);
                 return () => window.removeEventListener('hashchange', handleHashChange);
@@ -374,11 +354,17 @@
                     const localBookings = localStorage.getItem('gb_bookings_v6');
 
                     if (localBranches) setBranches(JSON.parse(localBranches));
-                    if (localSettings) {
-                        setSettings(JSON.parse(localSettings));
-                        setTempSettings(JSON.parse(localSettings));
-                    }
                     if (localBookings) setBookingLogs(JSON.parse(localBookings));
+                    
+                    // Fallback to default to prevent undefined properties
+                    if (localSettings) {
+                        try {
+                            const parsedSettings = JSON.parse(localSettings);
+                            const mergedSettings = { ...DEFAULT_SETTINGS, ...parsedSettings };
+                            setSettings(mergedSettings);
+                            setTempSettings(mergedSettings);
+                        } catch(e) { console.error("Error parsing local settings"); }
+                    }
 
                     try {
                         let firebaseConfig = MANUAL_FIREBASE_CONFIG;
@@ -432,9 +418,11 @@
                                 const configDoc = snap.docs.find(d => d.id === 'config');
                                 if (configDoc) {
                                     const data = configDoc.data();
-                                    setSettings(data);
-                                    setTempSettings(data);
-                                    localStorage.setItem('gb_settings_v6', JSON.stringify(data));
+                                    // Merge to prevent missing keys replacing existing valid configs
+                                    const mergedData = { ...DEFAULT_SETTINGS, ...data };
+                                    setSettings(mergedData);
+                                    setTempSettings(mergedData);
+                                    localStorage.setItem('gb_settings_v6', JSON.stringify(mergedData));
                                 } else if (snap.empty) {
                                     settingsRef.doc('config').set(DEFAULT_SETTINGS);
                                 }
@@ -472,30 +460,18 @@
             };
 
             const formatIDR = (num) => {
-                return new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR',
-                    minimumFractionDigits: 0
-                }).format(num);
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
             };
 
-            const getSelectedBranch = () => {
-                return branches.find(b => b.id === formData.branchId) || branches[0];
-            };
-
+            const getSelectedBranch = () => branches.find(b => b.id === formData.branchId) || branches[0];
             const currentBranchObj = getSelectedBranch();
             const currentPrice = currentBranchObj ? currentBranchObj.price : 127500;
 
             const generateUniqueBookingCode = () => {
                 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let randomPart = '';
-                for (let i = 0; i < 4; i++) {
-                    randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
+                let randomPart = Array.from({length: 4}).map(() => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
                 const today = new Date();
-                const datePart = today.getFullYear() + 
-                               String(today.getMonth() + 1).padStart(2, '0') + 
-                               String(today.getDate()).padStart(2, '0');
+                const datePart = today.getFullYear() + String(today.getMonth() + 1).padStart(2, '0') + String(today.getDate()).padStart(2, '0');
                 return `GB-${datePart}-${randomPart}`;
             };
 
@@ -512,18 +488,19 @@
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 const formattedDate = isNaN(dateObj.getTime()) ? formData.date : dateObj.toLocaleDateString(currentLang === 'id' ? 'id-ID' : 'en-US', options);
 
-                let message = settings.template;
-                message = message.replace(/\[KODE\]/g, uniqueCode);
-                message = message.replace(/\[NAMA\]/g, formData.name);
-                message = message.replace(/\[TELEPON\]/g, formData.phone);
-                message = message.replace(/\[CABANG\]/g, currentBranchObj.name + ` (${currentBranchObj.region})`);
-                message = message.replace(/\[TANGGAL\]/g, formattedDate);
-                message = message.replace(/\[JAM\]/g, formData.time + ' WIB');
-                message = message.replace(/\[LAYANAN\]/g, formData.service);
-                message = message.replace(/\[HARGA\]/g, formattedPrice);
-                message = message.replace(/\[CATATAN\]/g, formData.notes || '-');
+                let message = settings.template || DEFAULT_SETTINGS.template;
+                message = message.replace(/\[KODE\]/g, uniqueCode)
+                                 .replace(/\[NAMA\]/g, formData.name)
+                                 .replace(/\[TELEPON\]/g, formData.phone)
+                                 .replace(/\[CABANG\]/g, currentBranchObj.name + ` (${currentBranchObj.region})`)
+                                 .replace(/\[TANGGAL\]/g, formattedDate)
+                                 .replace(/\[JAM\]/g, formData.time + ' WIB')
+                                 .replace(/\[LAYANAN\]/g, formData.service)
+                                 .replace(/\[HARGA\]/g, formattedPrice)
+                                 .replace(/\[CATATAN\]/g, formData.notes || '-');
 
-                const branchPhoneNum = currentBranchObj.phone || settings.whatsapp;
+                // Fallback to defaults to prevent undefined errors
+                const branchPhoneNum = currentBranchObj.phone || settings.whatsapp || DEFAULT_SETTINGS.whatsapp;
                 const sanitizedPhone = branchPhoneNum.replace(/[^0-9]/g, '');
                 const finalPhone = sanitizedPhone.startsWith('0') ? '62' + sanitizedPhone.substring(1) : sanitizedPhone;
 
@@ -551,12 +528,7 @@
                     localStorage.setItem('gb_bookings_v6', JSON.stringify(updatedLogs));
                 }
                 
-                setSuccessBooking({
-                    link: waLink,
-                    messagePreview: message,
-                    whatsappNum: finalPhone,
-                    code: uniqueCode
-                });
+                setSuccessBooking({ link: waLink, messagePreview: message, whatsappNum: finalPhone, code: uniqueCode });
             };
 
             const handleCopyBookingCode = (code) => {
@@ -571,23 +543,34 @@
 
             const handleAdminLogin = (e) => {
                 e.preventDefault();
-                const pwd = adminPassword.trim().toLowerCase();
-                if (pwd === 'griyabugar' || pwd === 'admin' || pwd === '123456') {
+                const pwd = adminPassword.trim();
+                // SECURE ADMIN PASSWORD CHECK
+                if (pwd === 'GriyaBugar@Admin2026') {
                     setAdminAuthenticated(true);
                     setAdminError('');
                     showToast("Login Berhasil", "Selamat datang di halaman administrasi terpusat.", "success");
                 } else {
-                    setAdminError(currentLang === 'id' ? 'Sandi salah. Ketik: "griyabugar"' : 'Incorrect Password. Try: "griyabugar"');
+                    setAdminError(currentLang === 'id' ? 'Kata sandi tidak valid. Akses ditolak.' : 'Invalid password. Access denied.');
                 }
             };
 
             const handleSaveSettings = (e) => {
                 e.preventDefault();
+                
+                // Add robust validation for WhatsApp Number
+                const sanitizedWa = (tempSettings.whatsapp || '').replace(/[^0-9]/g, '');
+                if (sanitizedWa.length < 10) {
+                    triggerAlert("Input Tidak Valid", "Mohon masukkan nomor WhatsApp yang benar (minimal 10 digit angka).");
+                    return;
+                }
+
+                const newSettingsToSave = { ...tempSettings, whatsapp: sanitizedWa };
+
                 if (fb && isFirebaseConnected) {
-                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('settings').doc('config').set(tempSettings);
+                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('settings').doc('config').set(newSettingsToSave);
                 } else {
-                    setSettings(tempSettings);
-                    localStorage.setItem('gb_settings_v6', JSON.stringify(tempSettings));
+                    setSettings(newSettingsToSave);
+                    localStorage.setItem('gb_settings_v6', JSON.stringify(newSettingsToSave));
                 }
                 showToast("Pengaturan Disimpan", "Template WhatsApp dan nomor utama berhasil diperbarui.", "success");
             };
@@ -606,7 +589,7 @@
             const handleAddBranch = (e) => {
                 e.preventDefault();
                 if (!newBranch.name || !newBranch.price) {
-                    triggerAlert("Gagal Menambahkan", "Harap isi semua kolom untuk menambahkan cabang baru.");
+                    triggerAlert("Gagal Menambahkan", "Harap isi semua kolom wajib untuk menambahkan cabang baru.");
                     return;
                 }
 
@@ -616,6 +599,12 @@
                     return;
                 }
 
+                // Sanitize Phone Number
+                let cleanPhone = (newBranch.phone || '').replace(/[^0-9]/g, '');
+                if (cleanPhone.length < 10) {
+                    cleanPhone = DEFAULT_SETTINGS.whatsapp; // Fallback safely
+                }
+
                 const randomId = 'branch-' + Date.now();
                 const branchPayload = {
                     id: randomId,
@@ -623,7 +612,7 @@
                     region: newBranch.region,
                     price: priceNum,
                     address: newBranch.address || 'Alamat Cabang Baru',
-                    phone: newBranch.phone || '082124499924',
+                    phone: cleanPhone,
                     rating: '4.8 ★',
                     hours: '09:00 - 22:00',
                     therapists: '10 Terapis',
@@ -663,11 +652,7 @@
             const startEditBranch = (branch) => {
                 setEditingBranchId(branch.id);
                 setEditingBranchData({
-                    name: branch.name,
-                    region: branch.region,
-                    price: branch.price,
-                    address: branch.address,
-                    phone: branch.phone
+                    name: branch.name, region: branch.region, price: branch.price, address: branch.address, phone: branch.phone
                 });
             };
 
@@ -678,10 +663,13 @@
                     return;
                 }
 
+                let cleanPhone = (editingBranchData.phone || '').replace(/[^0-9]/g, '');
+                if (cleanPhone.length < 10) cleanPhone = DEFAULT_SETTINGS.whatsapp;
+
                 if (fb && isFirebaseConnected) {
-                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches').doc(id).update({ ...editingBranchData, price: priceNum });
+                    fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches').doc(id).update({ ...editingBranchData, price: priceNum, phone: cleanPhone });
                 } else {
-                    const updated = branches.map(b => b.id === id ? { id, ...editingBranchData, price: priceNum } : b);
+                    const updated = branches.map(b => b.id === id ? { ...b, ...editingBranchData, price: priceNum, phone: cleanPhone } : b);
                     setBranches(updated);
                     localStorage.setItem('gb_branches_v6', JSON.stringify(updated));
                 }
@@ -691,27 +679,19 @@
             };
 
             const clearBookingLogs = () => {
-                triggerConfirm(
-                    "Hapus Riwayat Booking",
-                    "Apakah Anda yakin ingin mengosongkan seluruh catatan log pemesanan?",
-                    async () => {
-                        if (fb && isFirebaseConnected) {
-                            try {
-                                const snapshot = await fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('bookings').get();
-                                const batch = fb.db.batch();
-                                snapshot.docs.forEach((doc) => {
-                                    batch.delete(doc.ref);
-                                });
-                                await batch.commit();
-                            } catch (err) {
-                                console.error("Error clearing Firebase bookings:", err);
-                            }
-                        }
-                        setBookingLogs([]);
-                        localStorage.removeItem('gb_bookings_v6');
-                        showToast("Log Dibersihkan", "Riwayat pemesanan telah dikosongkan secara permanen.", "success");
+                triggerConfirm("Hapus Riwayat Booking", "Apakah Anda yakin ingin mengosongkan seluruh catatan log pemesanan?", async () => {
+                    if (fb && isFirebaseConnected) {
+                        try {
+                            const snapshot = await fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('bookings').get();
+                            const batch = fb.db.batch();
+                            snapshot.docs.forEach(doc => batch.delete(doc.ref));
+                            await batch.commit();
+                        } catch (err) { console.error("Error clearing Firebase bookings:", err); }
                     }
-                );
+                    setBookingLogs([]);
+                    localStorage.removeItem('gb_bookings_v6');
+                    showToast("Log Dibersihkan", "Riwayat pemesanan telah dikosongkan secara permanen.", "success");
+                });
             };
 
             return (
@@ -739,17 +719,11 @@
                                 <p className="text-xs text-brandBrown/70 leading-relaxed mb-6">{dialogConfig.message}</p>
                                 <div className="flex gap-3 justify-center">
                                     {dialogConfig.showCancel && (
-                                        <button 
-                                            onClick={() => setDialogConfig(null)}
-                                            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition"
-                                        >
+                                        <button onClick={() => setDialogConfig(null)} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
                                             {currentLang === 'id' ? 'Batal' : 'Cancel'}
                                         </button>
                                     )}
-                                    <button 
-                                        onClick={dialogConfig.onConfirm}
-                                        className="px-5 py-2 bg-brandGold hover:bg-brandGoldDark text-white font-bold text-xs rounded-xl transition"
-                                    >
+                                    <button onClick={dialogConfig.onConfirm} className="px-5 py-2 bg-brandGold hover:bg-brandGoldDark text-white font-bold text-xs rounded-xl transition">
                                         OK
                                     </button>
                                 </div>
@@ -777,10 +751,7 @@
                                         >
                                             {TRANSLATIONS[currentLang].loc_prompt_yes}
                                         </button>
-                                        <button 
-                                            onClick={() => setIsLocationPromptOpen(false)} 
-                                            className="border border-brandBrown/20 hover:bg-brandCream text-brandBrown text-xs font-semibold py-2 px-3.5 rounded-xl transition min-h-[44px]"
-                                        >
+                                        <button onClick={() => setIsLocationPromptOpen(false)} className="border border-brandBrown/20 hover:bg-brandCream text-brandBrown text-xs font-semibold py-2 px-3.5 rounded-xl transition min-h-[44px]">
                                             {TRANSLATIONS[currentLang].loc_prompt_no}
                                         </button>
                                     </div>
@@ -793,27 +764,19 @@
                         <div className="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto z-45 max-w-xs bg-brandBrown text-white rounded-2xl p-4 shadow-2xl border border-brandGold/40 mx-auto sm:mx-0">
                             <div className="flex justify-between items-start">
                                 <span className="text-[10px] font-semibold tracking-wider text-brandGold uppercase">{TRANSLATIONS[currentLang].loc_rec_tag}</span>
-                                <button onClick={() => setIsLocationRecommended(false)} className="text-white/60 hover:text-white p-1" aria-label="Tutup rekomendasi"><X size={14} /></button>
+                                <button onClick={() => setIsLocationRecommended(false)} className="text-white/60 hover:text-white p-1"><X size={14} /></button>
                             </div>
                             <p className="font-serif text-lg mt-1 text-brandCream">Griya Bugar Yogyakarta</p>
                             <p className="text-[11px] text-brandCream/70 mt-1"><i className="fa-solid fa-clock mr-1 text-brandGold"></i> <span>{TRANSLATIONS[currentLang].loc_rec_open}</span></p>
                             <div className="mt-3 flex gap-2">
                                 <button 
-                                    onClick={() => {
-                                        setSelectedBranchId('jogja-pakuningratan');
-                                        setCurrentPage('branch-detail');
-                                        setIsLocationRecommended(false);
-                                    }} 
+                                    onClick={() => { setSelectedBranchId('jogja-pakuningratan'); setCurrentPage('branch-detail'); setIsLocationRecommended(false); }} 
                                     className="bg-brandGold hover:bg-brandGoldDark text-brandBrown font-semibold text-xs py-2 px-3 rounded-lg transition w-full text-center"
                                 >
                                     {TRANSLATIONS[currentLang].loc_rec_detail}
                                 </button>
                                 <button 
-                                    onClick={() => {
-                                        setFormData(prev => ({ ...prev, branchId: 'jogja-pakuningratan' }));
-                                        setCurrentPage('booking');
-                                        setIsLocationRecommended(false);
-                                    }} 
+                                    onClick={() => { setFormData(prev => ({ ...prev, branchId: 'jogja-pakuningratan' })); setCurrentPage('booking'); setIsLocationRecommended(false); }} 
                                     className="bg-transparent border border-brandGold/50 hover:bg-brandGold/20 text-brandGold text-xs py-2 px-3 rounded-lg transition w-full text-center"
                                 >
                                     Booking
@@ -822,6 +785,7 @@
                         </div>
                     )}
 
+                    {}
                     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
                         <button 
                             onClick={() => setIsWaWidgetOpen(!isWaWidgetOpen)} 
@@ -841,9 +805,8 @@
                                     {branches.map(b => (
                                         <a 
                                             key={b.id} 
-                                            href={`https://wa.me/${(b.phone || settings.whatsapp).replace(/[^0-9]/g, '')}?text=Halo%20Griya%20Bugar%20${encodeURIComponent(b.name)}`} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer" 
+                                            href={`https://wa.me/${(b.phone || settings.whatsapp || DEFAULT_SETTINGS.whatsapp).replace(/[^0-9]/g, '')}?text=Halo%20Griya%20Bugar%20${encodeURIComponent(b.name)}`} 
+                                            target="_blank" rel="noopener noreferrer" 
                                             className="flex items-center justify-between py-3 px-3 hover:bg-brandCream rounded-xl transition"
                                         >
                                             <div>
@@ -864,10 +827,7 @@
                                 
                                 <div 
                                     className="flex-shrink-0 cursor-pointer py-1 focus:outline-none flex items-center gap-2 select-none" 
-                                    onClick={() => {
-                                        setCurrentPage('home');
-                                        handleLogoTripleClick();
-                                    }}
+                                    onClick={() => { setCurrentPage('home'); handleLogoTripleClick(); }}
                                     title="Griya Bugar Indonesia"
                                 >
                                     <GriyaBugarLogo className="h-16 sm:h-20 md:h-22 w-auto object-contain" />
@@ -876,8 +836,7 @@
                                 <nav className="hidden lg:flex items-center space-x-5 xl:space-x-6 text-sm font-medium">
                                     {['home', 'about', 'services', 'branches', 'promos', 'articles', 'franchise', 'contact'].map(page => (
                                         <button 
-                                            key={page} 
-                                            onClick={() => setCurrentPage(page)} 
+                                            key={page} onClick={() => setCurrentPage(page)} 
                                             className={`transition py-2 ${currentPage === page ? 'text-brandGold border-b-2 border-brandGold' : 'text-brandCream/80 hover:text-brandGold'}`}
                                         >
                                             {TRANSLATIONS[currentLang][`nav_${page}`]}
@@ -897,8 +856,7 @@
 
                                 <div className="lg:hidden flex items-center gap-2">
                                     <select value={currentLang} onChange={(e) => setCurrentLang(e.target.value)} className="bg-brandBrown text-brandGold border border-brandGold/30 text-xs font-bold rounded-lg p-2 focus:outline-none min-h-[40px]">
-                                        <option value="id">ID</option>
-                                        <option value="en">EN</option>
+                                        <option value="id">ID</option><option value="en">EN</option>
                                     </select>
                                     <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-brandCream hover:text-brandGold p-2 transition focus:outline-none" aria-label="Buka Menu">
                                         <i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-xl`}></i>
@@ -912,8 +870,7 @@
                             <div className="lg:hidden bg-brandBrown/95 border-t border-brandGold/10 max-h-[calc(100vh-5rem)] overflow-y-auto text-center px-4 py-6 space-y-2">
                                 {['home', 'about', 'services', 'branches', 'promos', 'articles', 'franchise', 'contact'].map(page => (
                                     <button 
-                                        key={page} 
-                                        onClick={() => { setCurrentPage(page); setIsMobileMenuOpen(false); }} 
+                                        key={page} onClick={() => { setCurrentPage(page); setIsMobileMenuOpen(false); }} 
                                         className="block w-full py-3 text-brandCream hover:bg-brandGold/10 rounded-xl font-medium text-sm"
                                     >
                                         {TRANSLATIONS[currentLang][`nav_${page}`]}
@@ -928,6 +885,7 @@
                         )}
                     </header>
 
+                    {}
                     <main className="flex-grow">
                         
                         {currentPage === 'home' && (
@@ -1061,10 +1019,7 @@
                                                 </div>
                                                 <div className="p-6 pt-0">
                                                     <button 
-                                                        onClick={() => {
-                                                            setSelectedBranchId(b.id);
-                                                            setCurrentPage('branch-detail');
-                                                        }} 
+                                                        onClick={() => { setSelectedBranchId(b.id); setCurrentPage('branch-detail'); }} 
                                                         className="w-full bg-brandBrown hover:bg-brandGold hover:text-brandBrown text-white font-medium text-xs py-3 rounded-xl transition uppercase tracking-wider"
                                                     >
                                                         {TRANSLATIONS[currentLang].visit_branch}
@@ -1074,10 +1029,10 @@
                                         ))}
                                     </div>
                                 </div>
-
                             </div>
                         )}
 
+                        {}
                         {currentPage === 'about' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1108,7 +1063,7 @@
                                             </div>
                                         </div>
                                         <div>
-                                            <img src="ChatGPT Image Jul 21, 2026, 01_51_50 PM.png" className="rounded-3xl shadow-xl w-full h-[380px] object-cover" alt="Interior lounge" />
+                                            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" className="rounded-3xl shadow-xl w-full h-[380px] object-cover filter brightness-90" alt="Interior lounge" />
                                         </div>
                                     </div>
                                 </div>
@@ -1126,40 +1081,19 @@
                                     <div className="space-y-16">
                                         {[
                                             { 
-                                                name: 'Pijat Tradisional & Shiatsu', 
-                                                duration: '90 Menit', 
+                                                name: 'Pijat Tradisional & Shiatsu', duration: '90 Menit', 
                                                 desc_id: 'Teknik urut jawa dengan tangan menggunakan minyak, terkombinasi penekanan dan urut, dengan tehnik injakan kaki dan pijatan dengan tekanan jari/telapak di titik akupresur tubuh.', 
-                                                features: [
-                                                    'Ngilangin pegal-pegal Lelah letih dan lesu',
-                                                    'Melancarkan peredaran darah',
-                                                    'Bikin otot kaku jadi lemas lagi',
-                                                    'Redain stres & tegang di leher-pundak',
-                                                    'Bantu atasi sakit kepala tegang & insomnia',
-                                                    'Seimbangin energi tubuh, badan berasa “enteng”',
-                                                    'Sangat cocok untuk capek kerja keseharian'
-                                                ] 
+                                                features: [ 'Ngilangin pegal-pegal Lelah letih dan lesu', 'Melancarkan peredaran darah', 'Bikin otot kaku jadi lemas lagi', 'Redain stres & tegang di leher-pundak', 'Bantu atasi sakit kepala tegang & insomnia', 'Seimbangin energi tubuh, badan berasa “enteng”', 'Sangat cocok untuk capek kerja keseharian' ] 
                                             },
                                             { 
-                                                name: 'Refleksi Kaki', 
-                                                duration: '60 Menit', 
+                                                name: 'Refleksi Kaki', duration: '60 Menit', 
                                                 desc_id: 'Pijat ini menggunakan tehnik penekanan di titik titik saraf tertentu terutama di bagian kaki.', 
-                                                features: [
-                                                    'Memberikan efek relaksasi dan mengurangi tingkat kecemasan.',
-                                                    'Membantu meredakan sakit kepala dan nyeri.',
-                                                    'Melancarkan sirkulasi darah dan oksigen.',
-                                                    'Meningkatkan kualitas tidur.'
-                                                ] 
+                                                features: [ 'Memberikan efek relaksasi dan mengurangi tingkat kecemasan.', 'Membantu meredakan sakit kepala dan nyeri.', 'Melancarkan sirkulasi darah dan oksigen.', 'Meningkatkan kualitas tidur.' ] 
                                             },
                                             { 
-                                                name: 'Thai Massage', 
-                                                duration: '90 Menit', 
+                                                name: 'Thai Massage', duration: '90 Menit', 
                                                 desc_id: 'Pijat kering tanpa minyak, dengan tehnik stretching seperti yoga pasif lebih banyak penekan tarikan dan tekuk.', 
-                                                features: [
-                                                    'Nambah kelenturan & postur tubuh',
-                                                    'Ngurangin kaku sendi & nyeri punggung bawah',
-                                                    'Nambah energi karena alur “sen” dibuka',
-                                                    'Sangat cocok untuk capek olahraga'
-                                                ] 
+                                                features: [ 'Nambah kelenturan & postur tubuh', 'Ngurangin kaku sendi & nyeri punggung bawah', 'Nambah energi karena alur “sen” dibuka', 'Sangat cocok untuk capek olahraga' ] 
                                             }
                                         ].map((lay, idx) => (
                                             <div key={idx} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 grid grid-cols-1 lg:grid-cols-12 border border-brandGold/10">
@@ -1182,10 +1116,7 @@
                                                         </div>
                                                     </div>
                                                     <button 
-                                                        onClick={() => {
-                                                            setFormData(prev => ({ ...prev, service: lay.name }));
-                                                            setCurrentPage('booking');
-                                                        }} 
+                                                        onClick={() => { setFormData(prev => ({ ...prev, service: lay.name })); setCurrentPage('booking'); }} 
                                                         className="self-start bg-brandGold hover:bg-brandGoldDark text-brandBrown font-bold text-xs py-3 px-6 rounded-xl transition min-h-[42px]"
                                                     >
                                                         {currentLang === 'id' ? 'Pesan Sekarang' : 'Order Now'}
@@ -1222,10 +1153,7 @@
                                                 </div>
                                                 <div className="p-6 pt-0">
                                                     <button 
-                                                        onClick={() => {
-                                                            setSelectedBranchId(b.id);
-                                                            setCurrentPage('branch-detail');
-                                                        }} 
+                                                        onClick={() => { setSelectedBranchId(b.id); setCurrentPage('branch-detail'); }} 
                                                         className="w-full bg-brandBrown hover:bg-brandGold text-white hover:text-brandBrown py-3 rounded-xl text-xs sm:text-sm font-semibold transition uppercase tracking-wider min-h-[44px]"
                                                     >
                                                         {TRANSLATIONS[currentLang].visit_branch}
@@ -1238,6 +1166,7 @@
                             </div>
                         )}
 
+                        {}
                         {currentPage === 'branch-detail' && (() => {
                             const activeBranch = branches.find(b => b.id === selectedBranchId) || branches[0];
                             if (!activeBranch) return null;
@@ -1470,6 +1399,7 @@
                             </div>
                         )}
 
+                        {}
                         {currentPage === 'promos' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1636,6 +1566,7 @@
                             </div>
                         )}
 
+                        {}
                         {currentPage === 'admin' && (
                             <div className="py-16 sm:py-24 bg-slate-900 text-slate-100 min-h-screen">
                                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1646,7 +1577,7 @@
                                     <Lock size={22} className="text-brandGold" />
                                 </div>
                                 <h3 className="font-serif text-2xl font-bold text-slate-100 mb-2">Akses Terbatas Admin</h3>
-                                <p className="text-xs text-slate-400 mb-6">Masukkan kata sandi admin untuk mengelola harga, cabang, dan Firebase Cloud Sync.</p>
+                                <p className="text-xs text-slate-400 mb-6">Untuk keamanan, masukkan kata sandi Anda untuk mengelola harga, cabang, dan konfigurasi sinkronisasi cloud.</p>
                                 
                                 <form onSubmit={handleAdminLogin} className="space-y-4">
                                     <input 
@@ -1654,7 +1585,7 @@
                                         required 
                                         value={adminPassword} 
                                         onChange={(e) => setAdminPassword(e.target.value)} 
-                                        placeholder="Masukkan kata sandi..." 
+                                        placeholder="Ketik sandi aman di sini..." 
                                         className="w-full px-4 py-3 rounded-xl border border-slate-700 text-slate-900 focus:ring-2 focus:ring-brandGold transition-all text-center text-sm font-semibold" 
                                     />
                                     {adminError && <p className="text-xs text-rose-500 font-semibold">{adminError}</p>}
@@ -1733,8 +1664,8 @@
                                                 
                                                 <form onSubmit={handleSaveSettings} className="space-y-4 text-slate-300">
                                                     <div className="space-y-1.5">
-                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Nomor WhatsApp Center</label>
-                                                        <input type="text" required value={tempSettings.whatsapp} onChange={(e) => setTempSettings({ ...tempSettings, whatsapp: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-sm font-semibold" />
+                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Nomor WhatsApp Center (Angka Saja)</label>
+                                                        <input type="text" required value={tempSettings.whatsapp} onChange={(e) => setTempSettings({ ...tempSettings, whatsapp: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-sm font-semibold" placeholder="Contoh: 082124499924" />
                                                     </div>
                                                     <div className="space-y-1.5">
                                                         <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Template Draf Pesan WA</label>
@@ -1913,6 +1844,7 @@
                         </div>
                     </footer>
 
+                    {}
                     {successBooking && (
                         <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex justify-center items-center p-4">
                             <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-brandGold/20 shadow-2xl relative">
