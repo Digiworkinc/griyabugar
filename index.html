@@ -499,9 +499,9 @@
                                  .replace(/\[HARGA\]/g, formattedPrice)
                                  .replace(/\[CATATAN\]/g, formData.notes || '-');
 
-                // Fallback to defaults to prevent undefined errors
-                const branchPhoneNum = currentBranchObj.phone || settings.whatsapp || DEFAULT_SETTINGS.whatsapp;
-                const sanitizedPhone = branchPhoneNum.replace(/[^0-9]/g, '');
+                // Always send booking reports to the central WhatsApp number
+                const centralPhoneNum = settings.whatsapp || DEFAULT_SETTINGS.whatsapp;
+                const sanitizedPhone = centralPhoneNum.replace(/[^0-9]/g, '');
                 const finalPhone = sanitizedPhone.startsWith('0') ? '62' + sanitizedPhone.substring(1) : sanitizedPhone;
 
                 const waLink = `https://api.whatsapp.com/send?phone=${finalPhone}&text=${encodeURIComponent(message)}`;
