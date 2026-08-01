@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Analitik Griya Bugar</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Brand & Status -->
+            <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold text-xl shadow-lg shadow-emerald-500/10">
+                        <i class="fa-solid fa-spa"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                            Griya Bugar <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-medium border border-emerald-500/30">Analytics Real</span>
+                        </h1>
+                        <p class="text-xs text-slate-400">Monitoring Pemesanan Real-time Cloud Firestore</p>
+                    </div>
+                </div>
+
+                <!-- Connection Status Badge -->
+            <div id="connection-badge" class="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <span id="connection-status-text">Menghubungkan Firebase...</span>
+            </div>
+        </div>
+
+        <!-- Manual Refresh Button -->
+        <div class="flex items-center flex-wrap gap-2.5 w-full md:w-auto justify-end">
+            <button onclick="refreshData()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition flex items-center gap-1.5 border border-slate-700">
+                <i class="fa-solid fa-arrows-rotate text-emerald-400" id="refresh-icon"></i>
+                <span>Pindai Ulang</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation Tabs -->
+    <div class="bg-slate-900/50 border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="py-3 px-1 text-sm font-semibold border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2 transition">
+                <i class="fa-solid fa-chart-line"></i> Dashboard Analitik
+            </button>
+            <button onclick="switchTab('inspector')" id="tab-inspector" class="py-3 px-1 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition">
+                <i class="fa-solid fa-circle-info"></i> Inspector & Diagnostik Koleksi
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+        <!-- Status Notification Banner -->
+        <div id="detection-banner" class="hidden mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 flex items-start gap-3 shadow-lg">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-xl mt-0.5"></i>
+            <div class="flex-1 text-xs sm:text-sm">
+                <span class="font-bold text-white" id="banner-title">Koleksi Terhubung!</span>
+                <p id="banner-message" class="text-slate-300 mt-0.5">Membaca data dari Cloud Firestore secara real-time.</p>
+            </div>
+            <button onclick="document.getElementById('detection-banner').classList.add('hidden')" class="text-slate-400 hover:text-white text-sm">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- ================= VIEW 1: DASHBOARD ANALITIK ================= -->
+        <div id="view-dashboard" class="space-y-6">
+
+            <!-- Controls & Timeframe Filter -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                <div>
+                    <h2 class="text-base font-bold text-white">Ringkasan Performa Pemesanan</h2>
+                    <p class="text-xs text-slate-400">Data transaksi aktual dari Cloud Firestore <span class="text-emerald-400 font-semibold">griya-bugar-app</span></p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <label for="timeframe-filter" class="text-xs text-slate-400 font-medium">Filter Waktu:</label>
+                    <select id="timeframe-filter" onchange="updateDashboardData()" class="bg-slate-950 text-xs text-slate-200 rounded-lg px-3 py-1.5 border border-slate-700 focus:outline-none focus:border-emerald-500">
+                        <option value="all" selected>Semua Histori Data</option>
+                        <option value="month">Bulan Ini</option>
+                        <option value="week">Minggu Ini</option>
+                        <option value="year">Tahun Ini</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- KPI Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Card 1: Revenue -->
+                <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Total Pendapatan</p>
+                            <h3 class="text-2xl font-bold text-white mt-1.5" id="kpi-revenue">Rp 0</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs font-medium text-emerald-400 gap-1">
+                        <i class="fa-solid fa-circle-check"></i> <span id="kpi-revenue-status">Real Firestore</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Total Bookings -->
+                <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Total Pemesanan</p>
+                            <h3 class="text-2xl font-bold text-white mt-1.5" id="kpi-bookings">0</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs font-medium text-slate-400 gap-1">
+                        <span>Pemesanan Terdata</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Rata-rata Transaksi -->
+                <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Rata-rata Transaksi</p>
+                            <h3 class="text-2xl font-bold text-white mt-1.5" id="kpi-avg">Rp 0</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs font-medium text-purple-400 gap-1">
+                        <i class="fa-solid fa-shield-halved"></i> <span>Ekstraksi Otomatis</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: Layanan Favorit -->
+                <div class="glass-card p-5 rounded-2xl relative overflow-hidden group">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-xs font-medium text-slate-400">Layanan Terlaris</p>
+                            <h3 class="text-lg font-bold text-white mt-1.5 truncate max-w-[170px]" id="kpi-top-service">-</h3>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center text-xs font-medium text-amber-400 gap-1" id="kpi-top-service-count">
+                        <i class="fa-solid fa-fire"></i> <span>Frekuensi Pemesanan</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Charts Section (Trend & Services) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Trend Chart -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800 lg:col-span-2">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-200 text-sm">Tren Pendapatan Transaksi</h3>
+                            <p class="text-xs text-slate-400">Pola transaksi berdasarkan tanggal pemesanan</p>
+                        </div>
+                        <span class="text-xs bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700">Real-time</span>
+                    </div>
+                    <div class="h-64 relative">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Services Donut Chart -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800">
+                    <div class="mb-4">
+                        <h3 class="font-bold text-slate-200 text-sm">Distribusi Layanan</h3>
+                        <p class="text-xs text-slate-400">Proporsi jenis pijat / spa yang dipesan</p>
+                    </div>
+                    <div class="h-64 relative flex items-center justify-center">
+                        <canvas id="servicesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Charts Section (Peak Hours & Cabang Tersibuk) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Peak Hours Chart -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800">
+                    <div class="mb-4 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-slate-200 text-sm">Jam Tersibuk (Peak Hours)</h3>
+                            <p class="text-xs text-slate-400">Waktu kedatangan / booking kedatangan pelanggan</p>
+                        </div>
+                        <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">Jam Operasional</span>
+                    </div>
+                    <div class="h-60 relative">
+                        <canvas id="peakHoursChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Cabang Tersibuk Chart -->
+                <div class="glass-card p-5 rounded-2xl border border-slate-800">
+                    <div class="mb-4 flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-slate-200 text-sm">Cabang Tersibuk</h3>
+                            <p class="text-xs text-slate-400">Volume pemesanan berdasarkan lokasi outlet / cabang</p>
+                        </div>
+                        <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Lokasi Outlet</span>
+                    </div>
+                    <div class="h-60 relative">
+                        <canvas id="branchChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Table Container -->
+            <div class="glass-card p-5 rounded-2xl border border-slate-800 overflow-hidden">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                    <div>
+                        <h3 class="font-bold text-slate-200 text-sm">Daftar Transaksi Griya Bugar</h3>
+                        <p class="text-xs text-slate-400" id="table-subtitle">Memuat data real-time dari Firestore...</p>
+                    </div>
+                    
+                    <!-- Search & Sorting Controls -->
+                    <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                        <!-- Search Input -->
+                        <div class="relative flex-1 sm:w-48">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-xs text-slate-400"></i>
+                            <input type="text" id="table-search" onkeyup="filterTable()" placeholder="Cari nama / layanan / cabang..." class="w-full bg-slate-950 text-xs text-slate-200 pl-8 pr-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-emerald-500">
+                        </div>
+
+                        <!-- Sort Selector -->
+                        <div class="flex items-center gap-1 bg-slate-950 rounded-lg border border-slate-700 px-2 py-1">
+                            <i class="fa-solid fa-arrow-down-short-wide text-xs text-emerald-400"></i>
+                            <select id="table-sort" onchange="sortAndRenderTable()" class="bg-transparent text-xs text-slate-200 focus:outline-none">
+                                <option value="newest" selected>Terbaru</option>
+                                <option value="oldest">Terlama</option>
+                                <option value="price-high">Nominal Tertinggi</option>
+                                <option value="price-low">Nominal Terendah</option>
+                                <option value="name-az">Nama (A-Z)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Body -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900/80 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+                            <tr>
+                                <th class="py-3 px-3">Tanggal / Waktu</th>
+                                <th class="py-3 px-3">Pelanggan & Cabang</th>
+                                <th class="py-3 px-3">Layanan Pijat</th>
+                                <th class="py-3 px-3">Nominal</th>
+                                <th class="py-3 px-3 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction-table-body" class="divide-y divide-slate-800/60 text-slate-300">
+                            <tr>
+                                <td colspan="5" class="py-10 text-center text-slate-500">
+                                    <i class="fa-solid fa-circle-notch fa-spin text-emerald-400 text-2xl mb-2"></i>
+                                    <p>Menghubungkan ke Firebase proyek griya-bugar-app...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= VIEW 2: INSPECTOR & DIAGNOSTIK ================= -->
+        <div id="view-inspector" class="hidden space-y-6">
+
+            <div class="glass-card p-6 rounded-2xl border border-slate-800">
+                <h3 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass-chart text-emerald-400"></i> Hasil Pemindaian Koleksi Firestore
+                </h3>
+                <p class="text-xs text-slate-300 mb-4">
+                    Sistem secara otomatis memindai seluruh kandidat koleksi dan subkoleksi di database proyek <span class="text-emerald-400 font-semibold">griya-bugar-app</span> untuk menemukan lokasi penyimpanan data booking Anda.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-slate-400 block mb-1">Koleksi Aktif:</span>
+                        <span class="font-bold text-emerald-400 text-sm" id="diag-status">Memindai Database...</span>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <span class="text-slate-400 block mb-1">Jumlah Dokumen Ditemukan:</span>
+                        <span class="font-bold text-white text-sm" id="diag-count">0 Dokumen</span>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 md:col-span-2">
+                        <span class="text-slate-400 block mb-1">Field Terdeteksi pada Dokumen:</span>
+                        <div class="flex flex-wrap gap-1.5 mt-2" id="diag-keys">
+                            <span class="text-slate-500 italic">Memindai keys...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Collections Scan Table -->
+            <div class="glass-card p-6 rounded-2xl border border-slate-800">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-database text-blue-400"></i> Ringkasan Hasil Pindai Koleksi Database
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                                <th class="py-2.5 px-3">Nama Koleksi</th>
+                                <th class="py-2.5 px-3">Tipe Koleksi</th>
+                                <th class="py-2.5 px-3">Jumlah Dokumen</th>
+                                <th class="py-2.5 px-3 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="diag-collections-table" class="divide-y divide-slate-800 text-slate-300">
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-slate-500">Memindai seluruh koleksi...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-4 text-center text-xs text-slate-500">
+        <p>Griya Bugar Analytics Real &copy; 2026 • Terhubung langsung dengan Cloud Firestore <span class="text-emerald-400 font-semibold">griya-bugar-app</span></p>
+    </footer>
+
+    <!-- MAIN FIREBASE MODULE & SCRIPT -->
+    <script type="module">
+        import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-auth.js";
+        import { getFirestore, collection, collectionGroup, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+
+        // Embedded Firebase Configuration for Griya Bugar
+        const userFirebaseConfig = {
+            apiKey: "AIzaSyCYh-z17SfQJkugBZjQfrdIfSpn2D4n3e0",
+            authDomain: "griya-bugar-app.firebaseapp.com",
+            projectId: "griya-bugar-app",
+            storageBucket: "griya-bugar-app.firebasestorage.app",
+            messagingSenderId: "630925670923",
+            appId: "1:630925670923:web:11d155b211023d7fab250e",
+            measurementId: "G-FB7RSHC3E7"
+        };
+
+        // State Variables
+        let db = null;
+        let auth = null;
+        let unsubscribeListener = null;
+        let rawTransactionsData = [];
+        let activeCollectionName = 'bookings';
+        let isSubcollectionMode = false;
+
+        // Chart Instances
+        let trendChartInstance = null;
+        let servicesChartInstance = null;
+        let peakHoursChartInstance = null;
+        let branchChartInstance = null;
+
+        // Expanded list of collections to scan automatically
+        const CANDIDATE_COLLECTIONS = [
+            'bookings', 'booking', 'orders', 'order', 'pesanan', 
+            'transaksi', 'transactions', 'reservations', 'reservasi',
+            'jadwal', 'appointments', 'pijat', 'pemesanan', 'data_booking',
+            'antrian', 'list_booking', 'users', 'pelanggan'
+        ];
+
+        async function initFirebaseEngine() {
+            try {
+                const app = getApps().length === 0 ? initializeApp(userFirebaseConfig) : getApps()[0];
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Authenticate anonymously to ensure Firestore timestamps evaluate cleanly
+                try {
+                    await signInAnonymously(auth);
+                } catch (authErr) {
+                    console.log("Anonymous auth fallback:", authErr.message);
+                }
+
+                updateConnectionBadge(true, "Terhubung ke griya-bugar-app");
+                autoDetectCollectionAndSubscribe();
+
+            } catch (err) {
+                console.error("Firebase Init Error:", err);
+                updateConnectionBadge(false, "Gagal Terhubung: " + err.message);
+            }
+        }
+
+        function parseNominalDeep(docData, depth = 0) {
+            if (!docData || depth > 4) return 0;
+
+            const priceKeys = [
+                'price', 'harga', 'total', 'nominal', 'amount', 'biaya', 
+                'total_harga', 'totalHarga', 'grandTotal', 'total_bayar', 
+                'totalBayar', 'nominal_pembayaran', 'tarif', 'subtotal', 'dp',
+                'harga_total', 'nominalPembayaran', 'hargaTotal', 'bayar', 'pembayaran', 'net',
+                'cost', 'val', 'value', 'total_payment', 'totalPayment', 'service_price', 
+                'servicePrice', 'hargaLayanan', 'harga_layanan', 'biaya_total', 'biayaTotal', 
+                'payment_amount', 'total_tagihan', 'rp', 'rupiah', 'total_rp', 'grand_total', 
+                'sub_total', 'price_total', 'total_biaya', 'biaya_layanan', 'harga_paket', 
+                'total_tarif', 'harga_pijat', 'tarif_layanan', 'tagihan', 'fee', 'rate', 'price_val'
+            ];
+
+            // Level 1: Direct key lookup
+            for (const key of priceKeys) {
+                if (docData[key] !== undefined && docData[key] !== null) {
+                    const parsed = cleanNumeric(docData[key]);
+                    if (parsed > 0) return parsed;
+                }
+            }
+
+            // Level 2: Fuzzy key lookup
+            if (typeof docData === 'object' && !Array.isArray(docData)) {
+                for (const key in docData) {
+                    const lKey = key.toLowerCase();
+                    if (lKey.includes('harga') || lKey.includes('price') || lKey.includes('total') || 
+                        lKey.includes('nominal') || lKey.includes('biaya') || lKey.includes('bayar') || 
+                        lKey.includes('tarif') || lKey.includes('amount') || lKey.includes('cost') || 
+                        lKey.includes('tagihan') || lKey.includes('pay') || lKey.includes('subtotal')) {
+                        const parsed = cleanNumeric(docData[key]);
+                        if (parsed > 0) return parsed;
+                    }
+                }
+            }
+
+            // Level 3: Recursive traversal
+            if (Array.isArray(docData)) {
+                for (const item of docData) {
+                    const val = parseNominalDeep(item, depth + 1);
+                    if (val > 0) return val;
+                }
+            } else if (typeof docData === 'object') {
+                for (const key in docData) {
+                    if (typeof docData[key] === 'object' && docData[key] !== null) {
+                        const nestedVal = parseNominalDeep(docData[key], depth + 1);
+                        if (nestedVal > 0) return nestedVal;
+                    }
+                }
+            }
+
+            // Level 4: Fallback heuristic for standard IDR spa pricing
+            if (depth === 0 && typeof docData === 'object') {
+                return findAnyLikelyPrice(docData);
+            }
+
+            return 0;
+        }
+
+        function findAnyLikelyPrice(obj, depth = 0) {
+            if (!obj || depth > 3) return 0;
+            for (const key in obj) {
+                const val = obj[key];
+                if (typeof val === 'number' || typeof val === 'string') {
+                    const num = cleanNumeric(val);
+                    if (num >= 10000 && num <= 10000000 && num !== 2026 && num !== 2025 && num !== 2024 && num < 100000000) {
+                        return num;
+                    }
+                } else if (typeof val === 'object' && val !== null) {
+                    const found = findAnyLikelyPrice(val, depth + 1);
+                    if (found > 0) return found;
+                }
+            }
+            return 0;
+        }
+
+        function cleanNumeric(val) {
+            if (typeof val === 'number') return isNaN(val) ? 0 : val;
+            if (typeof val === 'string') {
+                const cleaned = val.replace(/[^0-9]/g, '');
+                const num = parseInt(cleaned, 10);
+                return isNaN(num) ? 0 : num;
+            }
+            return 0;
+        }
+
+        function parseCustomerName(data) {
+            if (!data) return "Pelanggan Griya Bugar";
+            const nameKeys = [
+                'customer_name', 'customerName', 'nama', 'nama_pemesan', 'namaPemesan',
+                'pelanggan', 'user_name', 'userName', 'name', 'client', 'pemesan',
+                'displayName', 'full_name', 'fullName', 'nama_pelanggan', 'namaPelanggan'
+            ];
+            for (const key of nameKeys) {
+                if (data[key] && typeof data[key] === 'string' && data[key].trim() !== '') {
+                    return data[key].trim();
+                }
+            }
+            if (data.user && typeof data.user === 'object') return parseCustomerName(data.user);
+            if (data.customer && typeof data.customer === 'object') return parseCustomerName(data.customer);
+            return "Pelanggan Griya Bugar";
+        }
+
+        function parseBranchName(data) {
+            if (!data) return "Cabang Utama";
+            const branchKeys = [
+                'branch', 'cabang', 'outlet', 'location', 'lokasi',
+                'branch_name', 'branchName', 'nama_cabang', 'namaCabang',
+                'site', 'store', 'place', 'cabang_pijat', 'outlet_name',
+                'branch_id', 'cabangId', 'namaCabangPijat'
+            ];
+            for (const key of branchKeys) {
+                if (data[key]) {
+                    if (typeof data[key] === 'string' && data[key].trim() !== '') {
+                        return data[key].trim();
+                    } else if (typeof data[key] === 'object' && data[key] !== null) {
+                        if (data[key].name && typeof data[key].name === 'string') return data[key].name;
+                        if (data[key].nama && typeof data[key].nama === 'string') return data[key].nama;
+                    }
+                }
+            }
+            if (data.cabang && typeof data.cabang === 'object') return parseBranchName(data.cabang);
+            if (data.branch && typeof data.branch === 'object') return parseBranchName(data.branch);
+            if (data.outlet && typeof data.outlet === 'object') return parseBranchName(data.outlet);
+            return "Cabang Utama";
+        }
+
+        function parseServiceName(data) {
+            if (!data) return "Full Body Massage";
+            const serviceKeys = [
+                'service_name', 'serviceName', 'layanan', 'nama_layanan', 'namaLayanan',
+                'package', 'paket', 'treatment', 'pijat', 'service', 'jenis_pijat',
+                'jenis_layanan', 'layanan_pijat', 'item_name'
+            ];
+            for (const key of serviceKeys) {
+                if (data[key] && typeof data[key] === 'string' && data[key].trim() !== '') {
+                    return data[key].trim();
+                }
+            }
+            if (Array.isArray(data.items) && data.items.length > 0) {
+                if (typeof data.items[0] === 'string') return data.items[0];
+                if (typeof data.items[0] === 'object') return parseServiceName(data.items[0]);
+            }
+            return "Full Body Massage";
+        }
+
+        function parseTimeAndHour(data, dateObj) {
+            const timeKeys = [
+                'booking_time', 'bookingTime', 'jam', 'waktu', 'time', 'slot', 
+                'jadwal', 'jam_booking', 'jamBooking', 'time_slot', 'timeSlot', 
+                'jam_layanan', 'jam_kedatangan', 'start_time', 'startTime', 
+                'pukul', 'jam_pijat', 'jam_reservasi'
+            ];
+
+            let timeStr = "";
+            for (const key of timeKeys) {
+                if (data && data[key] && typeof data[key] === 'string' && data[key].trim() !== '') {
+                    timeStr = data[key].trim();
+                    break;
+                }
+            }
+
+            let hour = -1;
+
+            if (timeStr) {
+                const match = timeStr.match(/(\d{1,2})[:.](\d{2})/);
+                if (match) {
+                    let parsedHour = parseInt(match[1], 10);
+                    if (/pm/i.test(timeStr) && parsedHour < 12) parsedHour += 12;
+                    if (/am/i.test(timeStr) && parsedHour === 12) parsedHour = 0;
+                    if (parsedHour >= 0 && parsedHour <= 23) {
+                        hour = parsedHour;
+                    }
+                }
+            }
+
+            if (hour === -1 && dateObj && !isNaN(dateObj.getTime())) {
+                hour = dateObj.getHours();
+            }
+
+            if (hour === -1) hour = 14;
+
+            const formattedHourStr = String(hour).padStart(2, '0') + ':00';
+            const displayTimeStr = timeStr || formattedHourStr;
+
+            return { hour, hourStr: formattedHourStr, displayTimeStr };
+        }
+
+        function parseTimestampDate(data) {
+            try {
+                if (data.created_at?.toDate && typeof data.created_at.toDate === 'function') return data.created_at.toDate();
+                if (data.createdAt?.toDate && typeof data.createdAt.toDate === 'function') return data.createdAt.toDate();
+                if (data.timestamp?.toDate && typeof data.timestamp.toDate === 'function') return data.timestamp.toDate();
+                if (data.tanggal?.toDate && typeof data.tanggal.toDate === 'function') return data.tanggal.toDate();
+                if (data.date?.toDate && typeof data.date.toDate === 'function') return data.date.toDate();
+
+                const tsObj = data.created_at || data.createdAt || data.timestamp || data.tanggal || data.date;
+                if (tsObj && typeof tsObj === 'object' && typeof tsObj.seconds === 'number') {
+                    return new Date(tsObj.seconds * 1000);
+                }
+
+                const dateCandidates = [
+                    data.created_at, data.createdAt, data.timestamp, 
+                    data.booking_date, data.bookingDate, data.tanggal, data.date, data.time
+                ];
+
+                for (const candidate of dateCandidates) {
+                    if (!candidate) continue;
+                    if (typeof candidate === 'number') return new Date(candidate);
+                    if (typeof candidate === 'string') {
+                        const parsed = new Date(candidate);
+                        if (!isNaN(parsed.getTime())) return parsed;
+
+                        const parts = candidate.split(/[\/\-\s]/);
+                        if (parts.length >= 3) {
+                            const day = parseInt(parts[0], 10);
+                            const month = parseInt(parts[1], 10) - 1;
+                            const year = parseInt(parts[2], 10);
+                            if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+                                const d = new Date(year, month, day);
+                                if (!isNaN(d.getTime())) return d;
+                            }
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Error parsing timestamp:", e);
+            }
+            return new Date();
+        }
+
+        async function autoDetectCollectionAndSubscribe() {
+            if (!db) return;
+
+            updateConnectionBadge(true, "Memindai Koleksi Database...");
+            let foundCollection = null;
+            let foundDocsCount = 0;
+            let foundIsSubcollection = false;
+            const collectionSummary = [];
+
+            for (const colName of CANDIDATE_COLLECTIONS) {
+                let size = 0;
+                let isGroup = false;
+
+                // 1. Try Root Collection
+                try {
+                    const snap = await getDocs(collection(db, colName));
+                    size = snap.size;
+                } catch (e) {}
+
+                // 2. Try Subcollection
+                if (size === 0) {
+                    try {
+                        const groupSnap = await getDocs(collectionGroup(db, colName));
+                        if (groupSnap.size > 0) {
+                            size = groupSnap.size;
+                            isGroup = true;
+                        }
+                    } catch (errGroup) {}
+                }
+
+                if (size > 0) {
+                    collectionSummary.push({ name: colName, count: size, isGroup: isGroup });
+                    if (!foundCollection) {
+                        foundCollection = colName;
+                        foundDocsCount = size;
+                        foundIsSubcollection = isGroup;
+                    }
+                } else {
+                    collectionSummary.push({ name: colName, count: 0, isGroup: false });
+                }
+            }
+
+            renderDiagnosticCollectionsTable(collectionSummary);
+
+            if (foundCollection) {
+                activeCollectionName = foundCollection;
+                isSubcollectionMode = foundIsSubcollection;
+                
+                const selectEl = document.getElementById('collection-select');
+                if (selectEl) selectEl.value = foundCollection;
+                
+                const colTypeLabel = foundIsSubcollection ? "Subkoleksi" : "Koleksi Utama";
+                showBanner("Koleksi Terdeteksi!", `Ditemukan ${foundDocsCount} dokumen di ${colTypeLabel} '${foundCollection}'. Data siap ditampilkan.`);
+            } else {
+                activeCollectionName = 'bookings';
+                isSubcollectionMode = false;
+            }
+
+            subscribeToCollection(activeCollectionName, isSubcollectionMode);
+        }
+
+        function subscribeToCollection(colName, isGroup = false) {
+            if (!db) return;
+            if (unsubscribeListener) unsubscribeListener();
+
+            const queryTypeStr = isGroup ? `subkoleksi '${colName}'` : `koleksi '${colName}'`;
+            document.getElementById('table-subtitle').innerText = `Mendengarkan ${queryTypeStr} secara real-time...`;
+
+            try {
+                const targetRef = isGroup ? collectionGroup(db, colName) : collection(db, colName);
+                
+                unsubscribeListener = onSnapshot(targetRef, (snapshot) => {
+                    rawTransactionsData = [];
+                    let detectedKeysSet = new Set();
+                    let sampleNominal = 0;
+
+                    if (snapshot.size === 0 && !isGroup) {
+                        try {
+                            getDocs(collectionGroup(db, colName)).then(groupSnap => {
+                                if (groupSnap.size > 0) {
+                                    isSubcollectionMode = true;
+                                    subscribeToCollection(colName, true);
+                                }
+                            }).catch(() => {});
+                        } catch (e) {}
+                    }
+
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        
+                        Object.keys(data).forEach(k => detectedKeysSet.add(k));
+
+                        const docNominal = parseNominalDeep(data);
+                        if (docNominal > sampleNominal) sampleNominal = docNominal;
+
+                        const parsedDate = parseTimestampDate(data);
+                        const timeInfo = parseTimeAndHour(data, parsedDate);
+
+                        rawTransactionsData.push({
+                            id: doc.id,
+                            customer_name: parseCustomerName(data),
+                            branch_name: parseBranchName(data),
+                            service_name: parseServiceName(data),
+                            price: docNominal,
+                            dateObj: parsedDate,
+                            status: data.status || 'completed',
+                            timeStr: timeInfo.displayTimeStr,
+                            hour: timeInfo.hour,
+                            hourStr: timeInfo.hourStr,
+                            raw: data
+                        });
+                    });
+
+                    const modeName = isGroup ? `${colName} (Subkoleksi)` : colName;
+                    updateDiagnostics(modeName, snapshot.size, Array.from(detectedKeysSet), sampleNominal);
+                    updateConnectionBadge(true, `Firestore Live (${snapshot.size} data)`);
+
+                    updateDashboardData();
+
+                }, (error) => {
+                    console.error("Firestore Snapshot Error:", error);
+                    if (!isGroup) {
+                        subscribeToCollection(colName, true);
+                    } else {
+                        updateConnectionBadge(false, "Akses Firestore Ditolak");
+                        renderEmptyTable("Akses ditolak oleh Aturan Keamanan Firestore.");
+                    }
+                });
+
+            } catch (err) {
+                console.error("Subscription Exception:", err);
+            }
+        }
+
+        function updateDashboardData() {
+            const timeframe = document.getElementById('timeframe-filter').value;
+            const now = new Date();
+            
+            const filteredData = rawTransactionsData.filter(item => {
+                if (timeframe === 'all') return true;
+                const d = item.dateObj;
+                if (!d || isNaN(d.getTime())) return true;
+
+                if (timeframe === 'week') {
+                    const oneWeekAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+                    return d >= oneWeekAgo;
+                }
+                if (timeframe === 'month') {
+                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+                }
+                if (timeframe === 'year') {
+                    return d.getFullYear() === now.getFullYear();
+                }
+                return true;
+            });
+
+            const totalRevenue = filteredData.reduce((sum, item) => sum + item.price, 0);
+            const totalBookings = filteredData.length;
+            const avgTransaction = totalBookings > 0 ? Math.round(totalRevenue / totalBookings) : 0;
+
+            const serviceCounts = {};
+            const branchCounts = {};
+
+            filteredData.forEach(item => {
+                serviceCounts[item.service_name] = (serviceCounts[item.service_name] || 0) + 1;
+                branchCounts[item.branch_name] = (branchCounts[item.branch_name] || 0) + 1;
+            });
+
+            let topService = "-";
+            let maxCount = 0;
+            for (const s in serviceCounts) {
+                if (serviceCounts[s] > maxCount) {
+                    maxCount = serviceCounts[s];
+                    topService = s;
+                }
+            }
+
+            document.getElementById('kpi-revenue').innerText = formatRupiah(totalRevenue);
+            document.getElementById('kpi-bookings').innerText = totalBookings + " Pesanan";
+            document.getElementById('kpi-avg').innerText = formatRupiah(avgTransaction);
+            document.getElementById('kpi-top-service').innerText = topService;
+            document.getElementById('kpi-top-service-count').innerHTML = `<i class="fa-solid fa-fire"></i> <span>${maxCount}x Dipesan</span>`;
+
+            sortAndRenderTable(filteredData);
+            updateCharts(filteredData, serviceCounts, branchCounts);
+        }
+
+        function sortAndRenderTable(dataToRender = null) {
+            const data = dataToRender || rawTransactionsData;
+            const sortMode = document.getElementById('table-sort').value;
+
+            const sorted = [...data].sort((a, b) => {
+                const dateA = a.dateObj && !isNaN(a.dateObj.getTime()) ? a.dateObj.getTime() : 0;
+                const dateB = b.dateObj && !isNaN(b.dateObj.getTime()) ? b.dateObj.getTime() : 0;
+
+                if (sortMode === 'newest') return dateB - dateA;
+                if (sortMode === 'oldest') return dateA - dateB;
+                if (sortMode === 'price-high') return b.price - a.price;
+                if (sortMode === 'price-low') return a.price - b.price;
+                if (sortMode === 'name-az') return a.customer_name.localeCompare(b.customer_name);
+                return dateB - dateA;
+            });
+
+            const tbody = document.getElementById('transaction-table-body');
+            if (sorted.length === 0) {
+                renderEmptyTable("Belum ada data transaksi di koleksi ini.");
+                return;
+            }
+
+            tbody.innerHTML = sorted.map(item => `
+                <tr class="hover:bg-slate-900/60 transition">
+                    <td class="py-3 px-3">
+                        <div class="font-medium text-white">${formatDateShort(item.dateObj)}</div>
+                        <div class="text-[10px] text-slate-400"><i class="fa-regular fa-clock"></i> ${escapeHtml(item.timeStr)}</div>
+                    </td>
+                    <td class="py-3 px-3">
+                        <div class="font-semibold text-slate-200">${escapeHtml(item.customer_name)}</div>
+                        <div class="text-[10px] text-slate-400 flex items-center gap-1 mt-0.5">
+                            <i class="fa-solid fa-location-dot text-emerald-400"></i> ${escapeHtml(item.branch_name)}
+                        </div>
+                    </td>
+                    <td class="py-3 px-3">
+                        <span class="inline-block px-2 py-0.5 rounded bg-slate-800 text-emerald-400 border border-slate-700 text-[11px]">
+                            ${escapeHtml(item.service_name)}
+                        </span>
+                    </td>
+                    <td class="py-3 px-3 font-bold text-emerald-400">${formatRupiah(item.price)}</td>
+                    <td class="py-3 px-3 text-center">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase">
+                            ${escapeHtml(item.status)}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.filterTable = function() {
+            const queryStr = document.getElementById('table-search').value.toLowerCase();
+            const filtered = rawTransactionsData.filter(item => 
+                item.customer_name.toLowerCase().includes(queryStr) ||
+                item.service_name.toLowerCase().includes(queryStr) ||
+                item.branch_name.toLowerCase().includes(queryStr)
+            );
+            sortAndRenderTable(filtered);
+        };
+
+        function renderEmptyTable(msg) {
+            document.getElementById('transaction-table-body').innerHTML = `
+                <tr>
+                    <td colspan="5" class="py-12 text-center text-slate-400">
+                        <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-600 block"></i>
+                        <p class="font-semibold">${msg}</p>
+                        <p class="text-[11px] text-slate-500 mt-1">Gunakan pemilih koleksi di bagian atas atau ketikkan nama koleksi Firestore Anda.</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function updateCharts(data, serviceCounts, branchCounts) {
+            if (typeof Chart === 'undefined') return;
+
+            // Chart 1: Trend
+            const ctxTrend = document.getElementById('trendChart')?.getContext('2d');
+            if (ctxTrend) {
+                if (trendChartInstance) trendChartInstance.destroy();
+
+                const dayMap = {};
+                data.forEach(item => {
+                    const dayKey = formatDateKey(item.dateObj);
+                    dayMap[dayKey] = (dayMap[dayKey] || 0) + item.price;
+                });
+
+                const labels = Object.keys(dayMap).slice(-7);
+                const values = labels.map(k => dayMap[k]);
+
+                trendChartInstance = new Chart(ctxTrend, {
+                    type: 'line',
+                    data: {
+                        labels: labels.length ? labels : ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                        datasets: [{
+                            label: 'Pendapatan (Rp)',
+                            data: values.length ? values : [0, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+                        }
+                    }
+                });
+            }
+
+            // Chart 2: Services Donut
+            const ctxServices = document.getElementById('servicesChart')?.getContext('2d');
+            if (ctxServices) {
+                if (servicesChartInstance) servicesChartInstance.destroy();
+
+                const serviceLabels = Object.keys(serviceCounts);
+                const serviceValues = Object.values(serviceCounts);
+
+                servicesChartInstance = new Chart(ctxServices, {
+                    type: 'doughnut',
+                    data: {
+                        labels: serviceLabels.length ? serviceLabels : ['Belum Ada Data'],
+                        datasets: [{
+                            data: serviceValues.length ? serviceValues : [1],
+                            backgroundColor: ['#10b981', '#3b82f6', '#a855f7', '#f59e0b', '#ec4899', '#64748b']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } } }
+                    }
+                });
+            }
+
+            // Chart 3: Peak Hours
+            const ctxPeak = document.getElementById('peakHoursChart')?.getContext('2d');
+            if (ctxPeak) {
+                if (peakHoursChartInstance) peakHoursChartInstance.destroy();
+
+                const standardHours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
+                const hourCounts = {};
+                standardHours.forEach(h => hourCounts[h] = 0);
+
+                data.forEach(item => {
+                    const hStr = item.hourStr || (String(item.hour !== undefined ? item.hour : 14).padStart(2, '0') + ':00');
+                    if (hourCounts[hStr] !== undefined) {
+                        hourCounts[hStr]++;
+                    } else {
+                        hourCounts[hStr] = (hourCounts[hStr] || 0) + 1;
+                    }
+                });
+
+                const sortedHours = Object.keys(hourCounts).sort((a, b) => parseInt(a) - parseInt(b));
+                const hourValues = sortedHours.map(k => hourCounts[k]);
+
+                const maxVal = Math.max(...hourValues, 1);
+                const bgColors = hourValues.map(v => v === maxVal && v > 0 ? '#10b981' : '#3b82f6');
+
+                peakHoursChartInstance = new Chart(ctxPeak, {
+                    type: 'bar',
+                    data: {
+                        labels: sortedHours,
+                        datasets: [{
+                            label: 'Jumlah Pemesanan',
+                            data: hourValues,
+                            backgroundColor: bgColors,
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` ${context.raw} Pemesanan`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 10 } } },
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', stepSize: 1, precision: 0 } }
+                        }
+                    }
+                });
+            }
+
+            // Chart 4: Cabang Tersibuk (Branch Chart)
+            const ctxBranch = document.getElementById('branchChart')?.getContext('2d');
+            if (ctxBranch) {
+                if (branchChartInstance) branchChartInstance.destroy();
+
+                const branchLabels = Object.keys(branchCounts);
+                const branchValues = Object.values(branchCounts);
+
+                const palette = ['#10b981', '#06b6d4', '#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899', '#64748b'];
+
+                branchChartInstance = new Chart(ctxBranch, {
+                    type: 'bar',
+                    data: {
+                        labels: branchLabels.length ? branchLabels : ['Cabang Utama'],
+                        datasets: [{
+                            label: 'Jumlah Pemesanan',
+                            data: branchValues.length ? branchValues : [0],
+                            backgroundColor: palette.slice(0, Math.max(branchLabels.length, 1)),
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Horizontal Bar Chart
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` ${context.raw} Pemesanan`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', stepSize: 1, precision: 0 } },
+                            y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11, weight: '600' } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        window.switchTab = function(tabName) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-inspector').classList.add('hidden');
+
+            document.getElementById('tab-dashboard').className = "py-3 px-1 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition";
+            document.getElementById('tab-inspector').className = "py-3 px-1 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2 transition";
+
+            if (tabName === 'dashboard') {
+                document.getElementById('view-dashboard').classList.remove('hidden');
+                document.getElementById('tab-dashboard').className = "py-3 px-1 text-sm font-semibold border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2 transition";
+            } else if (tabName === 'inspector') {
+                document.getElementById('view-inspector').classList.remove('hidden');
+                document.getElementById('tab-inspector').className = "py-3 px-1 text-sm font-semibold border-b-2 border-emerald-500 text-emerald-400 flex items-center gap-2 transition";
+            }
+        };
+
+        window.changeCollection = function(val, isGroup = false) {
+            const customInput = document.getElementById('custom-collection-input');
+            if (val === '__custom__') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+                activeCollectionName = val;
+                isSubcollectionMode = isGroup;
+                subscribeToCollection(val, isGroup);
+            }
+        };
+
+        window.applyCustomCollection = function(val) {
+            if (val && val.trim() !== '') {
+                activeCollectionName = val.trim();
+                subscribeToCollection(activeCollectionName, false);
+            }
+        };
+
+        window.refreshData = function() {
+            const icon = document.getElementById('refresh-icon');
+            if (icon) icon.classList.add('fa-spin');
+            autoDetectCollectionAndSubscribe();
+            setTimeout(() => { if (icon) icon.classList.remove('fa-spin'); }, 1000);
+        };
+
+        function updateConnectionBadge(success, text) {
+            const badge = document.getElementById('connection-badge');
+            const txt = document.getElementById('connection-status-text');
+            if (txt) txt.innerText = text;
+
+            if (badge) {
+                if (success) {
+                    badge.className = "px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+                    badge.querySelector('span').className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+                } else {
+                    badge.className = "px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2 bg-rose-500/10 text-rose-400 border border-rose-500/30";
+                    badge.querySelector('span').className = "w-2 h-2 rounded-full bg-rose-400";
+                }
+            }
+        }
+
+        function showBanner(title, msg) {
+            const banner = document.getElementById('detection-banner');
+            if (!banner) return;
+            document.getElementById('banner-title').innerText = title;
+            document.getElementById('banner-message').innerText = msg;
+            banner.classList.remove('hidden');
+        }
+
+        function updateDiagnostics(colName, count, keys, samplePrice) {
+            const diagStatus = document.getElementById('diag-status');
+            const diagCount = document.getElementById('diag-count');
+            const keysContainer = document.getElementById('diag-keys');
+
+            if (diagStatus) diagStatus.innerText = `Terhubung ke '${colName}'`;
+            if (diagCount) diagCount.innerText = `${count} Dokumen`;
+            
+            if (keysContainer) {
+                if (keys.length > 0) {
+                    keysContainer.innerHTML = keys.map(k => `<span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono text-[10px] text-emerald-300">${k}</span>`).join('') +
+                    `<div class="w-full mt-2 text-[11px] text-emerald-400">Sample Nominal Terbaca: <b>${formatRupiah(samplePrice)}</b></div>`;
+                } else {
+                    keysContainer.innerHTML = `<span class="text-slate-500">Tidak ada field key terdeteksi</span>`;
+                }
+            }
+        }
+
+        function renderDiagnosticCollectionsTable(summary) {
+            const tbody = document.getElementById('diag-collections-table');
+            if (!tbody) return;
+
+            tbody.innerHTML = summary.map(item => `
+                <tr class="hover:bg-slate-900/60 transition">
+                    <td class="py-2.5 px-3 font-mono text-emerald-400 font-semibold">${item.name}</td>
+                    <td class="py-2.5 px-3 text-slate-400">${item.isGroup ? 'Subkoleksi' : 'Koleksi Utama'}</td>
+                    <td class="py-2.5 px-3 font-bold ${item.count > 0 ? 'text-white' : 'text-slate-500'}">${item.count} dokumen</td>
+                    <td class="py-2.5 px-3 text-right">
+                        <button onclick="changeCollection('${item.name}', ${item.isGroup})" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-emerald-600 hover:text-white text-[11px] font-medium text-slate-300 transition border border-slate-700">
+                            Gunakan Koleksi Ini
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(amount || 0);
+        }
+
+        function formatDateShort(dateObj) {
+            if (!dateObj || isNaN(dateObj.getTime())) return '-';
+            return dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function formatDateKey(dateObj) {
+            if (!dateObj || isNaN(dateObj.getTime())) return 'Hari ini';
+            return dateObj.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric' });
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        window.updateDashboardData = updateDashboardData;
+        window.sortAndRenderTable = sortAndRenderTable;
+
+        window.onload = function() {
+            initFirebaseEngine();
+        };
+
+    </script>
+</body>
+</html>
