@@ -25,7 +25,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     
-    <!-- Tailwind Custom Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -97,6 +96,8 @@
             measurementId: "G-FB7RSHC3E7"
         };
 
+        const CENTRAL_WA_NUMBER = '6281399117756';
+
         const MapPin = ({ className = "", size = 20 }) => <i className={`fa-solid fa-map-pin ${className}`} style={{ fontSize: size }}></i>;
         const Calendar = ({ className = "", size = 20 }) => <i className={`fa-solid fa-calendar ${className}`} style={{ fontSize: size }}></i>;
         const Clock = ({ className = "", size = 20 }) => <i className={`fa-solid fa-clock ${className}`} style={{ fontSize: size }}></i>;
@@ -121,7 +122,7 @@
 
         const GriyaBugarLogo = ({ className = "h-16 sm:h-20 w-auto object-contain" }) => (
             <img 
-                src="ogo griya bugar.png" 
+                src="https://placehold.co/600x370/4A3728/C8A76A?text=GRIYA+BUGAR" 
                 className={className} 
                 alt="Griya Bugar Massage" 
                 onError={(e) => {
@@ -132,23 +133,45 @@
         );
 
         const INITIAL_BRANCHES = [
-            { id: 'jogja-pakuningratan', name: 'Pakuningratan', region: 'Yogyakarta', price: 127500, address: 'Jl. Pakuningratan No.3, Cokrodiningratan, Kec. Jetis, Kota Yogyakarta, DIY 55233', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '15 Terapis', serviceType: 'Home Service 24 Jam', spec: 'Balinese Heritage Warmth' },
-            { id: 'jogja-maguwo', name: 'Maguwo', region: 'Yogyakarta', price: 127500, address: 'Jl. Ring Road Utara No. Kav. 27, Nayan, Maguwoharjo, Kec. Depok, Sleman, DIY', phone: '082124499924', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '12 Terapis', serviceType: 'Reflexology Area', spec: 'Authentic Deep Tissue' },
-            { id: 'jogja-seturan', name: 'Seturan', region: 'Yogyakarta', price: 127500, address: 'Jl. Seturan Raya No. Kav. 99 B Lt.1, Kledokan, Caturtunggal, Kec. Depok, Sleman, DIY', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '14 Terapis', serviceType: 'Premium Lounge & Spa', spec: 'Modern Shiatsu Accupressure' },
-            { id: 'solo-baru', name: 'Solo Baru', region: 'Solo', price: 110000, address: 'Jl. Ir. Soekarno, Ruko Solo Baru Blok HH 36', phone: '082124499924', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '10 Terapis', serviceType: 'Family Wellness', spec: 'Traditional Herbal Warmth' },
-            { id: 'solo-gede', name: 'Pasar Gede', region: 'Solo', price: 110000, address: 'Jl. Urip Sumoharjo No.62 B (Utara Pasar Gede)', phone: '082124499924', rating: '4.7 ★', hours: '09:00 - 22:00', therapists: '8 Terapis', serviceType: 'Traditional Focus', spec: 'Spinal Recovery Standard' },
-            { id: 'malang-suhat', name: 'Soekarno Hatta (Suhat)', region: 'Malang', price: 115000, address: 'Jl. Soekarno Hatta, Ruko Taman Niaga Blok B 32-33', phone: '082124499924', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '12 Terapis', serviceType: 'Corporate Service', spec: 'Stress Relief Massage' },
-            { id: 'malang-dieng', name: 'Istana Dieng (ISDI)', region: 'Malang', price: 115000, address: 'Jl. Istana Dieng Raya II No.5', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '9 Terapis', serviceType: 'VIP Room Available', spec: 'Anxiety Release Therapy' },
-            { id: 'semarang-pattimura', name: 'Pattimura', region: 'Semarang', price: 120000, address: 'Ruko Pattimura Plaza Blok 1 No.5', phone: '0882003133789', rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '11 Terapis', serviceType: 'Premium Lounge', spec: 'Authentic Reflexology' },
-            { id: 'semarang-siliwangi', name: 'Siliwangi', region: 'Semarang', price: 120000, address: 'Jl. Jendral Sudirman No.187, Ruko Siliwangi Plaza Blok E8, Semarang Barat', phone: '0882003133789', rating: '4.7 ★', hours: '09:00 - 22:00', therapists: '10 Terapis', serviceType: 'Corporate Discount', spec: 'Muscle Knot Release' },
-            { id: 'semarang-mataram', name: 'Mataram', region: 'Semarang', price: 120000, address: 'Jl. Karang Wulan Utara No.09 (Samping Atlanta Elektronik)', phone: '0882003133789', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '13 Terapis', serviceType: 'Couple Room Suite', spec: 'Luxury Aromatherapy' },
-            { id: 'bali-1', name: 'Kuta (Bali 1)', region: 'Bali', price: 140000, address: 'Jl. Bypass Ngurah Rai, Tuban, Kec. Kuta, Kabupaten Badung, Bali 80361', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '16 Terapis', serviceType: 'Tourist Wellness Specialist', spec: 'Full-Body Deep Relaxation' },
-            { id: 'bali-2', name: 'Tuban Plaza (Bali 2)', region: 'Bali', price: 140000, address: 'Pertokoan Tuban Plaza, Ruko Tuban Plaza, Jl. Bypass Ngurah Rai No.27 Kav 25, Tuban, Kec. Kuta', phone: '082124499924', rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '14 Terapis', serviceType: 'VIP Ocean Scent Lounge', spec: 'Tension Relief & Accupressure' }
+            { id: 'jogja-pakuningratan', name: 'Pakuningratan', region: 'Yogyakarta', price: 127500, address: 'Jl. Pakuningratan No.3, Cokrodiningratan, Kec. Jetis, Kota Yogyakarta, DIY 55233', phone: CENTRAL_WA_NUMBER, rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '15 Terapis', serviceType: 'Home Service 24 Jam', spec: 'Balinese Heritage Warmth' },
+            { id: 'jogja-maguwo', name: 'Maguwo', region: 'Yogyakarta', price: 127500, address: 'Jl. Ring Road Utara No. Kav. 27, Nayan, Maguwoharjo, Kec. Depok, Sleman, DIY', phone: CENTRAL_WA_NUMBER, rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '12 Terapis', serviceType: 'Reflexology Area', spec: 'Authentic Deep Tissue' },
+            { id: 'jogja-seturan', name: 'Seturan', region: 'Yogyakarta', price: 127500, address: 'Jl. Seturan Raya No. Kav. 99 B Lt.1, Kledokan, Caturtunggal, Kec. Depok, Sleman, DIY', phone: CENTRAL_WA_NUMBER, rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '14 Terapis', serviceType: 'Premium Lounge & Spa', spec: 'Modern Shiatsu Accupressure' },
+            { id: 'solo-baru', name: 'Solo Baru', region: 'Solo', price: 110000, address: 'Jl. Ir. Soekarno, Ruko Solo Baru Blok HH 36', phone: CENTRAL_WA_NUMBER, rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '10 Terapis', serviceType: 'Family Wellness', spec: 'Traditional Herbal Warmth' },
+            { id: 'solo-gede', name: 'Pasar Gede', region: 'Solo', price: 110000, address: 'Jl. Urip Sumoharjo No.62 B (Utara Pasar Gede)', phone: CENTRAL_WA_NUMBER, rating: '4.7 ★', hours: '09:00 - 22:00', therapists: '8 Terapis', serviceType: 'Traditional Focus', spec: 'Spinal Recovery Standard' },
+            { id: 'malang-suhat', name: 'Soekarno Hatta (Suhat)', region: 'Malang', price: 115000, address: 'Jl. Soekarno Hatta, Ruko Taman Niaga Blok B 32-33', phone: CENTRAL_WA_NUMBER, rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '12 Terapis', serviceType: 'Corporate Service', spec: 'Stress Relief Massage' },
+            { id: 'malang-dieng', name: 'Istana Dieng (ISDI)', region: 'Malang', price: 115000, address: 'Jl. Istana Dieng Raya II No.5', phone: CENTRAL_WA_NUMBER, rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '9 Terapis', serviceType: 'VIP Room Available', spec: 'Anxiety Release Therapy' },
+            { id: 'semarang-pattimura', name: 'Pattimura', region: 'Semarang', price: 120000, address: 'Ruko Pattimura Plaza Blok 1 No.5', phone: CENTRAL_WA_NUMBER, rating: '4.8 ★', hours: '09:00 - 22:00', therapists: '11 Terapis', serviceType: 'Premium Lounge', spec: 'Authentic Reflexology' },
+            { id: 'semarang-siliwangi', name: 'Siliwangi', region: 'Semarang', price: 120000, address: 'Jl. Jendral Sudirman No.187, Ruko Siliwangi Plaza Blok E8, Semarang Barat', phone: CENTRAL_WA_NUMBER, rating: '4.7 ★', hours: '09:00 - 22:00', therapists: '10 Terapis', serviceType: 'Corporate Discount', spec: 'Muscle Knot Release' },
+            { id: 'semarang-mataram', name: 'Mataram', region: 'Semarang', price: 120000, address: 'Jl. Karang Wulan Utara No.09 (Samping Atlanta Elektronik)', phone: CENTRAL_WA_NUMBER, rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '13 Terapis', serviceType: 'Couple Room Suite', spec: 'Luxury Aromatherapy' },
+            { id: 'bali-1', name: 'Kuta (Bali 1)', region: 'Bali', price: 140000, address: 'Jl. Bypass Ngurah Rai, Tuban, Kec. Kuta, Kabupaten Badung, Bali 80361', phone: CENTRAL_WA_NUMBER, rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '16 Terapis', serviceType: 'Tourist Wellness Specialist', spec: 'Full-Body Deep Relaxation' },
+            { id: 'bali-2', name: 'Tuban Plaza (Bali 2)', region: 'Bali', price: 140000, address: 'Pertokoan Tuban Plaza, Ruko Tuban Plaza, Jl. Bypass Ngurah Rai No.27 Kav 25, Tuban, Kec. Kuta', phone: CENTRAL_WA_NUMBER, rating: '4.9 ★', hours: '09:00 - 22:00', therapists: '14 Terapis', serviceType: 'VIP Ocean Scent Lounge', spec: 'Tension Relief & Accupressure' }
         ];
 
         const DEFAULT_SETTINGS = {
-            whatsapp: '6282124499924',
-            template: 'Halo Griya Bugar [CABANG], saya ingin konfirmasi booking sesi kebugaran melalui Website.\n\n*Detail Pesanan:*\n- No. Booking: *[KODE]*\n- Nama: [NAMA]\n- No. WA: [TELEPON]\n- Tanggal: [TANGGAL]\n- Jam: [JAM]\n- Layanan: [LAYANAN]\n- Total Bayar: [HARGA]\n\nCatatan: [CATATAN]\n\nMohon diproses, terima kasih.'
+            whatsapp: CENTRAL_WA_NUMBER, // Centralized WhatsApp Center Number
+            template: 'Halo Griya Bugar Center, saya ingin konfirmasi booking sesi kebugaran melalui Website.\n\n*Detail Pesanan:*\n- No. Booking: *[KODE]*\n- Nama: [NAMA]\n- No. WA: [TELEPON]\n- Cabang Tujuan: *[CABANG]*\n- Tanggal: [TANGGAL]\n- Jam: [JAM]\n- Layanan: [LAYANAN]\n- Total Bayar: [HARGA]\n\nCatatan: [CATATAN]\n\nMohon diproses, terima kasih.'
+        };
+
+        const cleanAndDeduplicateBranches = (rawBranches) => {
+            if (!Array.isArray(rawBranches) || rawBranches.length === 0) return INITIAL_BRANCHES;
+            const uniqueMap = new Map();
+            
+            rawBranches.forEach(b => {
+                if (!b || !b.name) return;
+                const cleanName = b.name.trim().toLowerCase();
+                const cleanRegion = (b.region || 'Yogyakarta').trim().toLowerCase();
+                const key = `${cleanRegion}-${cleanName}`;
+                
+                if (!uniqueMap.has(key)) {
+                    uniqueMap.set(key, b);
+                } else {
+                    const existing = uniqueMap.get(key);
+                    if (b.id && !b.id.startsWith('branch-') && existing.id && existing.id.startsWith('branch-')) {
+                        uniqueMap.set(key, b);
+                    }
+                }
+            });
+            return Array.from(uniqueMap.values());
         };
 
         const TRANSLATIONS = {
@@ -178,7 +201,7 @@
                 loc_rec_open: "Buka 09:00 - 22:00 • Layanan Profesional",
                 loc_rec_detail: "Detail Cabang",
                 wa_online: "Online",
-                wa_card_desc: "Pilih cabang terdekat untuk langsung berkonsultasi via WhatsApp.",
+                wa_card_desc: "Hubungi WhatsApp Center Pusat untuk informasi & bantuan pemesanan terpusat.",
                 learn_more: "Pelajari Selengkapnya",
                 mins: "Menit",
                 visit_branch: "Kunjungi Cabang",
@@ -186,7 +209,7 @@
                 branch_highlights: "Keistimewaan Cabang",
                 meet_specialists: "Tim Terapis Ahli Kami",
                 form_booking_title: "Formulir Booking Online",
-                form_booking_desc: "Isi detail sesi pemesanan Anda untuk diteruskan secara cepat via WhatsApp.",
+                form_booking_desc: "Isi detail pemesanan Anda. Seluruh konfirmasi dikirim terpusat via WhatsApp Center.",
                 booking_code_label: "Kode Booking Unik Anda",
                 btn_copy_code: "Salin Kode Booking",
                 toast_copy_success: "Kode booking berhasil disalin!"
@@ -217,7 +240,7 @@
                 loc_rec_open: "Open 09:00 - 22:00 • Professional Services",
                 loc_rec_detail: "Branch Details",
                 wa_online: "Online",
-                wa_card_desc: "Choose the nearest branch to consult directly via WhatsApp.",
+                wa_card_desc: "Contact Central WhatsApp Center for centralized information & booking support.",
                 learn_more: "Learn More",
                 mins: "Minutes",
                 visit_branch: "Visit Branch",
@@ -225,7 +248,7 @@
                 branch_highlights: "Branch Highlights",
                 meet_specialists: "Meet Our Specialists",
                 form_booking_title: "Online Session Booking",
-                form_booking_desc: "Fill in your session details to compile a quick reservation dispatch message via WhatsApp.",
+                form_booking_desc: "Fill in your session details. All bookings are dispatched centrally via WhatsApp Center.",
                 booking_code_label: "Your Unique Booking Code",
                 btn_copy_code: "Copy Booking Code",
                 toast_copy_success: "Booking code copied successfully!"
@@ -264,12 +287,11 @@
             const [adminPassword, setAdminPassword] = useState('');
             const [adminError, setAdminError] = useState('');
 
-            const [newBranch, setNewBranch] = useState({ name: '', region: 'Yogyakarta', price: '', address: '', phone: '082124499924' });
+            const [newBranch, setNewBranch] = useState({ name: '', region: 'Yogyakarta', price: '', address: '', phone: CENTRAL_WA_NUMBER });
             const [editingBranchId, setEditingBranchId] = useState(null);
             const [editingBranchData, setEditingBranchData] = useState({ name: '', region: '', price: '', address: '', phone: '' });
             const [tempSettings, setTempSettings] = useState(DEFAULT_SETTINGS);
 
-            // SEO Dynamic Page Title & Description Updater
             useEffect(() => {
                 const seoTitles = {
                     home: "Griya Bugar - Pijat Profesional Jogja | Massage Jogja Terbaik (Since 1998)",
@@ -353,10 +375,9 @@
                     const localSettings = localStorage.getItem('gb_settings_v6');
                     const localBookings = localStorage.getItem('gb_bookings_v6');
 
-                    if (localBranches) setBranches(JSON.parse(localBranches));
+                    if (localBranches) setBranches(cleanAndDeduplicateBranches(JSON.parse(localBranches)));
                     if (localBookings) setBookingLogs(JSON.parse(localBookings));
                     
-                    // Fallback to default to prevent undefined properties
                     if (localSettings) {
                         try {
                             const parsedSettings = JSON.parse(localSettings);
@@ -408,8 +429,9 @@
                                     INITIAL_BRANCHES.forEach(b => branchesRef.doc(b.id).set(b));
                                 } else {
                                     const loadedBranches = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                                    setBranches(loadedBranches);
-                                    localStorage.setItem('gb_branches_v6', JSON.stringify(loadedBranches));
+                                    const cleaned = cleanAndDeduplicateBranches(loadedBranches);
+                                    setBranches(cleaned);
+                                    localStorage.setItem('gb_branches_v6', JSON.stringify(cleaned));
                                 }
                             }, console.error);
 
@@ -418,7 +440,6 @@
                                 const configDoc = snap.docs.find(d => d.id === 'config');
                                 if (configDoc) {
                                     const data = configDoc.data();
-                                    // Merge to prevent missing keys replacing existing valid configs
                                     const mergedData = { ...DEFAULT_SETTINGS, ...data };
                                     setSettings(mergedData);
                                     setTempSettings(mergedData);
@@ -499,8 +520,8 @@
                                  .replace(/\[HARGA\]/g, formattedPrice)
                                  .replace(/\[CATATAN\]/g, formData.notes || '-');
 
-                // Always send booking reports to the central WhatsApp number
-                const centralPhoneNum = settings.whatsapp || DEFAULT_SETTINGS.whatsapp;
+                // STRICT RULE: ALWAYS SEND TO CENTRAL WHATSAPP CENTER 6281399117756
+                const centralPhoneNum = settings.whatsapp || CENTRAL_WA_NUMBER;
                 const sanitizedPhone = centralPhoneNum.replace(/[^0-9]/g, '');
                 const finalPhone = sanitizedPhone.startsWith('0') ? '62' + sanitizedPhone.substring(1) : sanitizedPhone;
 
@@ -544,7 +565,6 @@
             const handleAdminLogin = (e) => {
                 e.preventDefault();
                 const pwd = adminPassword.trim();
-                // SECURE ADMIN PASSWORD CHECK
                 if (pwd === 'GriyaBugar@Admin2026') {
                     setAdminAuthenticated(true);
                     setAdminError('');
@@ -556,8 +576,6 @@
 
             const handleSaveSettings = (e) => {
                 e.preventDefault();
-                
-                // Add robust validation for WhatsApp Number
                 const sanitizedWa = (tempSettings.whatsapp || '').replace(/[^0-9]/g, '');
                 if (sanitizedWa.length < 10) {
                     triggerAlert("Input Tidak Valid", "Mohon masukkan nomor WhatsApp yang benar (minimal 10 digit angka).");
@@ -572,7 +590,7 @@
                     setSettings(newSettingsToSave);
                     localStorage.setItem('gb_settings_v6', JSON.stringify(newSettingsToSave));
                 }
-                showToast("Pengaturan Disimpan", "Template WhatsApp dan nomor utama berhasil diperbarui.", "success");
+                showToast("Pengaturan Disimpan", "Template WhatsApp dan nomor WA Center utama berhasil diperbarui.", "success");
             };
 
             const handleSaveCustomFirebaseConfig = (e) => {
@@ -599,10 +617,9 @@
                     return;
                 }
 
-                // Sanitize Phone Number
                 let cleanPhone = (newBranch.phone || '').replace(/[^0-9]/g, '');
                 if (cleanPhone.length < 10) {
-                    cleanPhone = DEFAULT_SETTINGS.whatsapp; // Fallback safely
+                    cleanPhone = CENTRAL_WA_NUMBER;
                 }
 
                 const randomId = 'branch-' + Date.now();
@@ -623,12 +640,12 @@
                 if (fb && isFirebaseConnected) {
                     fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches').doc(randomId).set(branchPayload);
                 } else {
-                    const updated = [...branches, branchPayload];
+                    const updated = cleanAndDeduplicateBranches([...branches, branchPayload]);
                     setBranches(updated);
                     localStorage.setItem('gb_branches_v6', JSON.stringify(updated));
                 }
 
-                setNewBranch({ name: '', region: 'Yogyakarta', price: '', address: '', phone: '082124499924' });
+                setNewBranch({ name: '', region: 'Yogyakarta', price: '', address: '', phone: CENTRAL_WA_NUMBER });
                 showToast("Cabang Ditambahkan", "Cabang baru berhasil disimpan.", "success");
             };
 
@@ -664,7 +681,7 @@
                 }
 
                 let cleanPhone = (editingBranchData.phone || '').replace(/[^0-9]/g, '');
-                if (cleanPhone.length < 10) cleanPhone = DEFAULT_SETTINGS.whatsapp;
+                if (cleanPhone.length < 10) cleanPhone = CENTRAL_WA_NUMBER;
 
                 if (fb && isFirebaseConnected) {
                     fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches').doc(id).update({ ...editingBranchData, price: priceNum, phone: cleanPhone });
@@ -691,6 +708,30 @@
                     setBookingLogs([]);
                     localStorage.removeItem('gb_bookings_v6');
                     showToast("Log Dibersihkan", "Riwayat pemesanan telah dikosongkan secara permanen.", "success");
+                });
+            };
+
+            const handleResetCloudBranches = () => {
+                triggerConfirm("Reset & Bersihkan Cabang Cloud", "Apakah Anda yakin ingin membersihkan seluruh data sampah cabang di Cloud Database dan mengembalikan ke data standar resmi 12 cabang?", async () => {
+                    if (fb && isFirebaseConnected) {
+                        try {
+                            const branchesRef = fb.db.collection('artifacts').doc(fb.appId).collection('public').doc('data').collection('branches');
+                            const snapshot = await branchesRef.get();
+                            const batch = fb.db.batch();
+                            snapshot.docs.forEach(doc => batch.delete(doc.ref));
+                            await batch.commit();
+
+                            INITIAL_BRANCHES.forEach(b => branchesRef.doc(b.id).set(b));
+                            showToast("Cloud Ditata Ulang", "Seluruh data cabang telah dibersihkan dari duplikat dan direset ke standar resmi.", "success");
+                        } catch (err) {
+                            console.error("Error resetting branches:", err);
+                            triggerAlert("Gagal Reset", "Terjadi kesalahan saat menyinkronkan ke Cloud.");
+                        }
+                    } else {
+                        setBranches(INITIAL_BRANCHES);
+                        localStorage.setItem('gb_branches_v6', JSON.stringify(INITIAL_BRANCHES));
+                        showToast("Reset Lokal Berhasil", "Data cabang tersetel kembali ke standar resmi.", "success");
+                    }
                 });
             };
 
@@ -785,12 +826,12 @@
                         </div>
                     )}
 
-                    {}
+                    {/* Floating WhatsApp Widget (Directs 100% to Central WA 6281399117756) */}
                     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
                         <button 
                             onClick={() => setIsWaWidgetOpen(!isWaWidgetOpen)} 
                             className="bg-emerald-600 hover:bg-emerald-700 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition relative group focus:outline-none"
-                            aria-label="WhatsApp Care"
+                            aria-label="WhatsApp Care Center"
                         >
                             <i className="fa-brands fa-whatsapp text-3xl"></i>
                         </button>
@@ -798,24 +839,18 @@
                         {isWaWidgetOpen && (
                             <div className="absolute bottom-16 right-0 mb-4 w-72 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-brandGold/20 overflow-hidden transition-all">
                                 <div className="bg-brandBrown p-4 text-white">
-                                    <h4 className="font-serif text-lg text-brandGold">Griya Bugar Care</h4>
+                                    <h4 className="font-serif text-lg text-brandGold">Griya Bugar Care Center</h4>
                                     <p className="text-xs text-brandCream/80 mt-1">{TRANSLATIONS[currentLang].wa_card_desc}</p>
                                 </div>
-                                <div className="p-2 divide-y divide-brandCream-dark/50 max-h-80 overflow-y-auto">
-                                    {branches.map(b => (
-                                        <a 
-                                            key={b.id} 
-                                            href={`https://wa.me/${(b.phone || settings.whatsapp || DEFAULT_SETTINGS.whatsapp).replace(/[^0-9]/g, '')}?text=Halo%20Griya%20Bugar%20${encodeURIComponent(b.name)}`} 
-                                            target="_blank" rel="noopener noreferrer" 
-                                            className="flex items-center justify-between py-3 px-3 hover:bg-brandCream rounded-xl transition"
-                                        >
-                                            <div>
-                                                <p className="text-xs font-semibold text-brandBrown">Griya Bugar {b.name}</p>
-                                                <p className="text-[10px] text-emerald-600 flex items-center gap-1 mt-0.5"><i className="fa-solid fa-circle text-[6px]"></i> <span>{TRANSLATIONS[currentLang].wa_online}</span></p>
-                                            </div>
-                                            <i className="fa-brands fa-whatsapp text-emerald-500 text-xl"></i>
-                                        </a>
-                                    ))}
+                                <div className="p-4 bg-brandCream/30 text-center">
+                                    <a 
+                                        href={`https://wa.me/${(settings.whatsapp || CENTRAL_WA_NUMBER).replace(/[^0-9]/g, '')}?text=Halo%20Griya%20Bugar%20Center%2C%20saya%20ingin%20konsultasi%20layanan%20kebugaran`} 
+                                        target="_blank" rel="noopener noreferrer" 
+                                        className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-xl text-xs font-bold transition shadow-md"
+                                    >
+                                        <i className="fa-brands fa-whatsapp text-lg"></i>
+                                        <span>Chat WA Center Pusat</span>
+                                    </a>
                                 </div>
                             </div>
                         )}
@@ -1032,7 +1067,6 @@
                             </div>
                         )}
 
-                        {}
                         {currentPage === 'about' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1166,7 +1200,6 @@
                             </div>
                         )}
 
-                        {}
                         {currentPage === 'branch-detail' && (() => {
                             const activeBranch = branches.find(b => b.id === selectedBranchId) || branches[0];
                             if (!activeBranch) return null;
@@ -1191,7 +1224,6 @@
                                                         
                                                         <div className="grid grid-cols-1 gap-3 mt-8 border-t border-brandCream/20 pt-6 text-xs sm:text-sm text-brandCream/90">
                                                             <p className="flex items-start gap-2"><MapPin size={16} className="text-brandGold shrink-0" /><span>{activeBranch.address}</span></p>
-                                                            <p className="flex items-center gap-2"><Phone size={16} className="text-brandGold shrink-0" /><span>WhatsApp: {activeBranch.phone}</span></p>
                                                             <p className="flex items-center gap-2"><Clock size={16} className="text-brandGold shrink-0" /><span>Jam Operasional: {activeBranch.hours || '09:00 - 22:00'}</span></p>
                                                             <p className="flex items-center gap-2"><i className="fa-solid fa-star text-brandGold shrink-0"></i><span>Rating: {activeBranch.rating || '4.9 ★'}</span></p>
                                                             <p className="flex items-center gap-2"><i className="fa-solid fa-wallet text-brandGold shrink-0"></i><span className="font-bold text-brandGold text-sm">Harga Khusus Booking Web: {formatIDR(activeBranch.price)}</span></p>
@@ -1246,7 +1278,7 @@
                                                         <input type="text" name="name" required placeholder="Contoh: Budi Santoso" value={formData.name} onChange={handleInputChange} className="w-full bg-brandCream border border-brandGold/20 rounded-xl p-3.5 focus:outline-none focus:ring-2 focus:ring-brandGold/20 min-h-[48px]" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="font-semibold block">Nomor WhatsApp Aktif <span className="text-rose-500">*</span></label>
+                                                        <label className="font-semibold block">Nomor WhatsApp Anda <span className="text-rose-500">*</span></label>
                                                         <input type="tel" name="phone" required placeholder="Contoh: 081234567890" value={formData.phone} onChange={handleInputChange} className="w-full bg-brandCream border border-brandGold/20 rounded-xl p-3.5 focus:outline-none focus:ring-2 focus:ring-brandGold/20 min-h-[48px]" />
                                                     </div>
                                                 </div>
@@ -1275,12 +1307,12 @@
                                                 <div className="p-4 bg-brandCream border border-brandGold/10 rounded-2xl flex justify-between items-center">
                                                     <div>
                                                         <p className="font-semibold text-xs text-brandBrown uppercase tracking-wider">Total Booking Sesi Web:</p>
-                                                        <p className="text-[10px] text-brandBrown/60">Pembayaran langsung di tempat.</p>
+                                                        <p className="text-[10px] text-brandBrown/60">Pembayaran langsung di tempat saat kedatangan.</p>
                                                     </div>
                                                     <span className="text-2xl font-bold text-brandGold">{formatIDR(activeBranch.price)}</span>
                                                 </div>
                                                 <button type="submit" className="w-full bg-brandGold hover:bg-brandGoldDark text-brandBrown font-bold text-sm py-4 rounded-xl transition shadow-lg flex justify-center items-center gap-2 min-h-[50px] uppercase">
-                                                    <i className="fa-brands fa-whatsapp text-lg"></i> BOOK VIA WHATSAPP CABANG
+                                                    <i className="fa-brands fa-whatsapp text-lg"></i> BOOK VIA WHATSAPP CENTER (6281399117756)
                                                 </button>
                                             </form>
                                         </div>
@@ -1296,7 +1328,7 @@
                                     <div className="text-center max-w-lg mx-auto mb-10">
                                         <span className="text-brandGold font-semibold text-xs uppercase tracking-[0.2em]">FAST ONLINE BOOKING</span>
                                         <h2 className="font-serif text-2xl sm:text-3xl text-brandBrown mt-2">Reservasi Sesi Griya Bugar</h2>
-                                        <p className="text-xs text-brandBrown/60 mt-2">Lengkapi detail pemesanan untuk mengarahkan pesan konfirmasi instan ke WhatsApp cabang terpilih.</p>
+                                        <p className="text-xs text-brandBrown/60 mt-2">Lengkapi detail pemesanan. Seluruh konfirmasi pemesanan dikirim terpusat ke WhatsApp Center.</p>
                                     </div>
                                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                                         <div className="lg:col-span-5 bg-brandBrown text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-brandGold/20 relative overflow-hidden flex flex-col justify-between min-h-[400px]">
@@ -1329,7 +1361,7 @@
                                                     </div>
                                                 </div>
                                                 <div className="space-y-1.5">
-                                                    <label className="text-xs font-bold text-brandBrown/80 uppercase block">Nomor WhatsApp Aktif</label>
+                                                    <label className="text-xs font-bold text-brandBrown/80 uppercase block">Nomor WhatsApp Anda</label>
                                                     <div className="relative">
                                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brandGold"><Phone size={18} /></div>
                                                         <input type="tel" name="phone" required placeholder="Contoh: 081234567890" value={formData.phone} onChange={handleInputChange} className="w-full pl-10 pr-4 py-3 rounded-xl border border-brandGold/20 focus:ring-2 focus:ring-brandGold/20 bg-brandCream focus:bg-white text-sm" />
@@ -1389,7 +1421,7 @@
                                                 </div>
 
                                                 <button type="submit" className="w-full bg-brandGold hover:bg-brandGoldDark text-white font-bold py-4 rounded-xl shadow-lg flex justify-center items-center gap-2 text-base">
-                                                    <MessageSquare size={18} /> Kirim Pemesanan ke WhatsApp Cabang
+                                                    <MessageSquare size={18} /> Kirim Pemesanan ke WA Center Pusat
                                                 </button>
                                             </form>
                                         </div>
@@ -1399,7 +1431,6 @@
                             </div>
                         )}
 
-                        {}
                         {currentPage === 'promos' && (
                             <div className="py-16 sm:py-24 bg-white">
                                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1549,12 +1580,13 @@
                                                     <p className="flex items-start gap-3"><MapPin size={16} className="text-brandGold shrink-0" /><span>Jl. Pakuningratan No.3, Cokrodiningratan, Kec. Jetis, Kota Yogyakarta, DIY 55233</span></p>
                                                     <p className="flex items-start gap-3"><i className="fa-solid fa-envelope text-brandGold text-lg shrink-0 mt-0.5"></i><span>Griyabugarofficiall98@gmail.com</span></p>
                                                     <p className="flex items-start gap-3"><Clock size={16} className="text-brandGold shrink-0" /><span>09:00 - 22:00 (WIB)</span></p>
+                                                    <p className="flex items-start gap-3"><Phone size={16} className="text-brandGold shrink-0" /><span>WA Center: +62 813-9911-7756</span></p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="lg:col-span-7 bg-white border border-brandGold/20 rounded-3xl p-8 shadow-sm">
                                             <h3 className="font-serif text-xl sm:text-2xl text-brandBrown mb-6 font-medium">Kirimkan Pesan Anda</h3>
-                                            <form onSubmit={(e) => { e.preventDefault(); showToast("Pesan Dikirim", "Pertanyaan Anda akan segera direspons oleh Admin.", "success"); e.target.reset(); }} className="space-y-4 text-xs sm:text-sm text-brandBrown">
+                                            <form onSubmit={(e) => { e.preventDefault(); showToast("Pesan Dikirim", "Pertanyaan Anda akan segera direspons oleh Admin WA Center.", "success"); e.target.reset(); }} className="space-y-4 text-xs sm:text-sm text-brandBrown">
                                                 <input type="text" required placeholder="Nama Lengkap" className="w-full bg-brandCream border border-brandGold/20 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brandGold/20" />
                                                 <input type="email" required placeholder="Email" className="w-full bg-brandCream border border-brandGold/20 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brandGold/20" />
                                                 <textarea rows="4" required placeholder="Tuliskan pesan Anda di sini..." className="w-full bg-brandCream border border-brandGold/20 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brandGold/20" />
@@ -1566,34 +1598,33 @@
                             </div>
                         )}
 
-                        {}
                         {currentPage === 'admin' && (
                             <div className="py-16 sm:py-24 bg-slate-900 text-slate-100 min-h-screen">
                                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                                     
                                     {!adminAuthenticated ? (
-                            <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 shadow-2xl max-w-md mx-auto text-center">
-                                <div className="w-12 h-12 bg-brandGold/10 text-brandGold rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <Lock size={22} className="text-brandGold" />
-                                </div>
-                                <h3 className="font-serif text-2xl font-bold text-slate-100 mb-2">Akses Terbatas Admin</h3>
-                                <p className="text-xs text-slate-400 mb-6">Untuk keamanan, masukkan kata sandi Anda untuk mengelola harga, cabang, dan konfigurasi sinkronisasi cloud.</p>
-                                
-                                <form onSubmit={handleAdminLogin} className="space-y-4">
-                                    <input 
-                                        type="password" 
-                                        required 
-                                        value={adminPassword} 
-                                        onChange={(e) => setAdminPassword(e.target.value)} 
-                                        placeholder="Ketik sandi aman di sini..." 
-                                        className="w-full px-4 py-3 rounded-xl border border-slate-700 text-slate-900 focus:ring-2 focus:ring-brandGold transition-all text-center text-sm font-semibold" 
-                                    />
-                                    {adminError && <p className="text-xs text-rose-500 font-semibold">{adminError}</p>}
-                                    <button type="submit" className="w-full bg-brandGold hover:bg-brandGoldDark text-slate-950 font-bold py-3 rounded-xl transition-all uppercase tracking-wider text-xs">Buka Dashboard</button>
-                                </form>
-                            </div>
-                        ) : (
-                            <div className="space-y-8">
+                                        <div className="bg-slate-800 rounded-3xl p-8 border border-slate-700 shadow-2xl max-w-md mx-auto text-center">
+                                            <div className="w-12 h-12 bg-brandGold/10 text-brandGold rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <Lock size={22} className="text-brandGold" />
+                                            </div>
+                                            <h3 className="font-serif text-2xl font-bold text-slate-100 mb-2">Akses Terbatas Admin</h3>
+                                            <p className="text-xs text-slate-400 mb-6">Untuk keamanan, masukkan kata sandi Anda untuk mengelola harga, cabang, dan konfigurasi sinkronisasi WA Center terpusat.</p>
+                                            
+                                            <form onSubmit={handleAdminLogin} className="space-y-4">
+                                                <input 
+                                                    type="password" 
+                                                    required 
+                                                    value={adminPassword} 
+                                                    onChange={(e) => setAdminPassword(e.target.value)} 
+                                                    placeholder="Ketik sandi aman di sini..." 
+                                                    className="w-full px-4 py-3 rounded-xl border border-slate-700 text-slate-900 focus:ring-2 focus:ring-brandGold transition-all text-center text-sm font-semibold" 
+                                                />
+                                                {adminError && <p className="text-xs text-rose-500 font-semibold">{adminError}</p>}
+                                                <button type="submit" className="w-full bg-brandGold hover:bg-brandGoldDark text-slate-950 font-bold py-3 rounded-xl transition-all uppercase tracking-wider text-xs">Buka Dashboard</button>
+                                            </form>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-8">
                                             
                                             <div className="bg-slate-800 rounded-3xl p-6 border border-slate-700 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                                                 <div>
@@ -1659,19 +1690,20 @@
 
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-6">
                                                 <div className="border-b border-slate-700 pb-4">
-                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><SettingsIcon size={18} /> Konfigurasi Cloud Firebase & WhatsApp Center</h4>
+                                                    <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><SettingsIcon size={18} /> Konfigurasi WA Center Utama</h4>
+                                                    <p className="text-xs text-slate-400 mt-1">Seluruh pemesanan via web akan masuk terpusat ke nomor WhatsApp Center di bawah ini.</p>
                                                 </div>
                                                 
                                                 <form onSubmit={handleSaveSettings} className="space-y-4 text-slate-300">
                                                     <div className="space-y-1.5">
-                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Nomor WhatsApp Center (Angka Saja)</label>
-                                                        <input type="text" required value={tempSettings.whatsapp} onChange={(e) => setTempSettings({ ...tempSettings, whatsapp: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-sm font-semibold" placeholder="Contoh: 082124499924" />
+                                                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Nomor WA Center Utama (Angka Saja)</label>
+                                                        <input type="text" required value={tempSettings.whatsapp} onChange={(e) => setTempSettings({ ...tempSettings, whatsapp: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-sm font-semibold" placeholder="Contoh: 6281399117756" />
                                                     </div>
                                                     <div className="space-y-1.5">
                                                         <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Template Draf Pesan WA</label>
                                                         <textarea rows={5} required value={tempSettings.template} onChange={(e) => setTempSettings({ ...tempSettings, template: e.target.value })} className="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:ring-2 focus:ring-brandGold text-xs font-mono" />
                                                     </div>
-                                                    <button type="submit" className="bg-brandGold hover:bg-brandGoldDark text-slate-950 font-bold px-6 py-3 rounded-xl text-xs transition uppercase flex items-center gap-1.5"><Save size={14} /> Simpan Pengaturan WA</button>
+                                                    <button type="submit" className="bg-brandGold hover:bg-brandGoldDark text-slate-950 font-bold px-6 py-3 rounded-xl text-xs transition uppercase flex items-center gap-1.5"><Save size={14} /> Simpan Nomor WA Center</button>
                                                 </form>
 
                                                 <div className="pt-6 border-t border-slate-700 space-y-3">
@@ -1690,8 +1722,11 @@
                                             </div>
 
                                             <div className="bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-md space-y-6">
-                                                <div className="border-b border-slate-700 pb-4">
+                                                <div className="border-b border-slate-700 pb-4 flex justify-between items-center flex-wrap gap-2">
                                                     <h4 className="font-serif text-lg font-bold text-brandGold flex items-center gap-2"><MapPin size={18} /> Pengelolaan Cabang & Harga Sesi</h4>
+                                                    <button onClick={handleResetCloudBranches} className="bg-amber-600/30 hover:bg-amber-600 text-amber-300 hover:text-white border border-amber-500/40 text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                                                        <i className="fa-solid fa-rotate-left mr-1"></i> Clean & Reset Data Cloud
+                                                    </button>
                                                 </div>
 
                                                 <form onSubmit={handleAddBranch} className="bg-slate-900 p-4 rounded-2xl border border-slate-700 grid grid-cols-1 md:grid-cols-5 gap-4 items-end text-xs text-slate-800">
@@ -1714,8 +1749,8 @@
                                                         <input type="text" required value={newBranch.address} onChange={(e) => setNewBranch({ ...newBranch, address: e.target.value })} placeholder="Alamat cabang" className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white focus:ring-1 focus:ring-brandGold" />
                                                     </div>
                                                     <div className="space-y-1.5">
-                                                        <label className="text-slate-400 font-bold uppercase">Nomor WA Cabang</label>
-                                                        <input type="text" required value={newBranch.phone} onChange={(e) => setNewBranch({ ...newBranch, phone: e.target.value })} placeholder="Nomor WA Cabang" className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white focus:ring-1 focus:ring-brandGold" />
+                                                        <label className="text-slate-400 font-bold uppercase">Nomor Kontak Cabang</label>
+                                                        <input type="text" required value={newBranch.phone} onChange={(e) => setNewBranch({ ...newBranch, phone: e.target.value })} placeholder="Nomor Kontak Cabang" className="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-700 text-white focus:ring-1 focus:ring-brandGold" />
                                                     </div>
                                                     <div className="space-y-1.5 flex gap-2">
                                                         <div className="w-full">
@@ -1794,6 +1829,7 @@
 
                     </main>
 
+                    {}
                     <footer className="bg-brandBrown text-brandCream pt-16 pb-12 border-t border-brandGold/20 mt-auto">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 mb-8 border-b border-brandCream/10 text-xs sm:text-sm">
                             <div className="space-y-4">
@@ -1852,7 +1888,7 @@
                                 <div className="text-center mb-5">
                                     <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3 shadow-md shadow-emerald-100"><CheckCircle2 size={28} className="text-emerald-600" /></div>
                                     <h3 className="font-serif text-2xl font-bold text-slate-800">{currentLang === 'id' ? 'Draf Pesan Telah Siap!' : 'Message Draft Ready!'}</h3>
-                                    <p className="text-xs text-slate-500 mt-1">{currentLang === 'id' ? 'Satu langkah lagi untuk melakukan konfirmasi pemesanan ke cabang Griya Bugar.' : 'One final step to submit and confirm your booking with Griya Bugar branch.'}</p>
+                                    <p className="text-xs text-slate-500 mt-1">{currentLang === 'id' ? 'Satu langkah lagi untuk melakukan konfirmasi pemesanan ke WhatsApp Center.' : 'One final step to submit and confirm your booking with WhatsApp Center.'}</p>
                                 </div>
 
                                 <div className="bg-brandCream border border-brandGold/30 p-4 rounded-2xl mb-4 text-center">
@@ -1871,12 +1907,12 @@
                                 </div>
 
                                 <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-5 text-left">
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Isi Pesan WhatsApp:</p>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">Isi Pesan WhatsApp Center (6281399117756):</p>
                                     <div className="text-xs font-mono text-slate-700 bg-white p-3 rounded-xl border border-slate-100 whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto">{successBooking.messagePreview}</div>
                                 </div>
                                 <div className="space-y-3">
                                     <a href={successBooking.link} target="_blank" rel="noopener noreferrer" onClick={() => setSuccessBooking(null)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-2xl transition shadow-lg flex justify-center items-center gap-2 text-sm">
-                                        Hubungkan ke WhatsApp Sekarang <ExternalLink size={14} />
+                                        Hubungkan ke WhatsApp Center Sekarang <ExternalLink size={14} />
                                     </a>
                                     <button onClick={() => setSuccessBooking(null)} className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-2xl text-xs transition">Kembali, Ubah Data Booking Logs</button>
                                 </div>
