@@ -441,6 +441,13 @@
                                 if (configDoc) {
                                     const data = configDoc.data();
                                     const mergedData = { ...DEFAULT_SETTINGS, ...data };
+                                    
+                                    // AUTO-HEAL: Jika di Cloud Firebase tersimpan nomor lama (82124499924), otomatis perbarui data di Cloud ke WA Center Pusat 6281399117756
+                                    if (!mergedData.whatsapp || mergedData.whatsapp.includes('82124499924')) {
+                                        mergedData.whatsapp = CENTRAL_WA_NUMBER;
+                                        settingsRef.doc('config').set(mergedData); // Timpa & perbaiki data di Cloud Firestore
+                                    }
+                                    
                                     setSettings(mergedData);
                                     setTempSettings(mergedData);
                                     localStorage.setItem('gb_settings_v6', JSON.stringify(mergedData));
@@ -844,7 +851,7 @@
                                 </div>
                                 <div className="p-4 bg-brandCream/30 text-center">
                                     <a 
-                                        href={`https://wa.me/${(settings.whatsapp || CENTRAL_WA_NUMBER).replace(/[^0-9]/g, '')}?text=Halo%20Griya%20Bugar%20Center%2C%20saya%20ingin%20konsultasi%20layanan%20kebugaran`} 
+                                        href={`https://wa.me/${CENTRAL_WA_NUMBER}?text=Halo%20Griya%20Bugar%20Center%2C%20saya%20ingin%20konsultasi%20layanan%20kebugaran`} 
                                         target="_blank" rel="noopener noreferrer" 
                                         className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white py-3 px-4 rounded-xl text-xs font-bold transition shadow-md"
                                     >
